@@ -19,7 +19,7 @@
 // ────────────────────────────────────────────────────────────────
 
 const SHEET_NAME = 'Articles';
-const SPREADSHEET_ID = ''; // Optional: leave blank to use the active spreadsheet
+const SPREADSHEET_ID = 'https://docs.google.com/spreadsheets/d/1x4fzD2dfZLLUZ9_mUxQJgXEYB0VmkYMltlkqTwzEGV8/edit?gid=0#gid=0'; // Optional: leave blank to use the active spreadsheet
 
 function getSheet() {
   const ss = SPREADSHEET_ID
