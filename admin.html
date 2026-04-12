@@ -8,58 +8,64 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-/* ── Admin-specific styles ── */
-body { background: #f4f4f2; }
+body { background: #f4f3f0; }
 .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-.admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 2.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border); }
-.admin-header h1 { font-family: var(--font-serif); font-size: 2rem; }
-.admin-header a { font-size:0.85rem; color: var(--text-muted); text-decoration:none; }
-.admin-header a:hover { color: var(--teal); }
+.admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border); flex-wrap:wrap; gap:1rem; }
+.admin-header h1 { font-family:var(--font-serif); font-size:2rem; }
+.admin-header-links { display:flex; gap:1.5rem; align-items:center; font-size:0.85rem; }
+.admin-header-links a { color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.admin-header-links a:hover { color:var(--teal); }
+
 .admin-tabs { display:flex; gap:0.5rem; margin-bottom:2rem; }
-.admin-tab { padding:0.55rem 1.4rem; border:1px solid var(--border); background:#fff; cursor:pointer; font-family:var(--font-sans); font-size:0.85rem; letter-spacing:0.04em; transition: all 0.2s; border-radius:2px; }
+.admin-tab { padding:0.55rem 1.4rem; border:1px solid var(--border); background:#fff; cursor:pointer; font-family:var(--font-sans); font-size:0.85rem; letter-spacing:0.04em; transition:all 0.2s; border-radius:2px; }
 .admin-tab.active { background:var(--charcoal); color:#fff; border-color:var(--charcoal); }
 .tab-pane { display:none; }
 .tab-pane.active { display:block; }
 
-/* Form */
 .admin-form { background:#fff; border:1px solid var(--border); padding:2rem; border-radius:4px; }
 .admin-form .form-group { margin-bottom:1.4rem; }
 .admin-form label { display:block; font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.5rem; font-family:var(--font-sans); }
-.admin-form input, .admin-form select, .admin-form textarea { width:100%; padding:0.75rem 1rem; border:1px solid var(--border); background:#fafaf8; font-family:var(--font-sans); font-size:0.95rem; color:var(--charcoal); border-radius:2px; transition: border-color 0.2s; box-sizing:border-box; }
-.admin-form input:focus, .admin-form select:focus, .admin-form textarea:focus { outline:none; border-color:var(--teal); }
-.admin-form textarea { resize: vertical; min-height: 300px; line-height:1.8; }
+.admin-form input, .admin-form select { width:100%; padding:0.75rem 1rem; border:1px solid var(--border); background:#fafaf8; font-family:var(--font-sans); font-size:0.95rem; color:var(--charcoal); border-radius:2px; transition:border-color 0.2s; box-sizing:border-box; }
+.admin-form input:focus, .admin-form select:focus { outline:none; border-color:var(--teal); }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-.admin-actions { display:flex; gap:1rem; align-items:center; padding-top:1rem; border-top:1px solid var(--border); }
-.btn-danger { background:#c0392b; color:#fff; border:none; padding:0.7rem 1.4rem; cursor:pointer; font-family:var(--font-sans); font-size:0.85rem; letter-spacing:0.05em; border-radius:2px; }
+.admin-actions { display:flex; gap:1rem; align-items:center; padding-top:1rem; border-top:1px solid var(--border); flex-wrap:wrap; }
+.btn-danger { background:#c0392b; color:#fff; border:none; padding:0.7rem 1.4rem; cursor:pointer; font-family:var(--font-sans); font-size:0.85rem; letter-spacing:0.05em; border-radius:2px; transition:opacity 0.2s; }
+.btn-danger:hover { opacity:0.85; }
+.btn-danger:disabled { opacity:0.5; cursor:not-allowed; }
 
-/* Article list */
 .article-list { display:flex; flex-direction:column; gap:1rem; }
-.article-list-item { background:#fff; border:1px solid var(--border); padding:1.5rem; display:flex; justify-content:space-between; align-items:flex-start; border-radius:4px; }
+.article-list-item { background:#fff; border:1px solid var(--border); padding:1.5rem; display:flex; justify-content:space-between; align-items:flex-start; border-radius:4px; transition:box-shadow 0.2s; }
+.article-list-item:hover { box-shadow:var(--shadow-sm); }
 .ali-info h3 { font-family:var(--font-serif); font-size:1.2rem; margin-bottom:0.3rem; }
 .ali-info .ali-meta { font-size:0.8rem; color:var(--text-muted); letter-spacing:0.03em; }
-.ali-info .ali-cat { display:inline-block; background:var(--teal-light); color:var(--teal); padding:0.15rem 0.6rem; border-radius:100px; font-size:0.75rem; margin-left:0.5rem; }
+.ali-cat { display:inline-block; background:var(--teal-light); color:var(--teal); padding:0.15rem 0.6rem; border-radius:100px; font-size:0.75rem; margin-left:0.5rem; }
+.ali-draft { display:inline-block; background:#fef3cd; color:#856404; padding:0.15rem 0.6rem; border-radius:100px; font-size:0.75rem; margin-left:0.4rem; }
 .ali-actions { display:flex; gap:0.5rem; flex-shrink:0; margin-left:2rem; }
-.btn-sm { padding:0.4rem 0.9rem; font-size:0.8rem; border-radius:2px; cursor:pointer; font-family:var(--font-sans); letter-spacing:0.04em; border:1px solid var(--border); background:#fff; transition:all 0.2s; }
+.btn-sm { padding:0.4rem 0.9rem; font-size:0.8rem; border-radius:2px; cursor:pointer; font-family:var(--font-sans); letter-spacing:0.04em; border:1px solid var(--border); background:#fff; transition:all 0.2s; text-decoration:none; display:inline-flex; align-items:center; }
 .btn-sm:hover { background:var(--charcoal); color:#fff; border-color:var(--charcoal); }
-.btn-sm.danger:hover { background:#c0392b; border-color:#c0392b; }
 
-/* Rich editor toolbar */
-.editor-toolbar { display:flex; gap:0.4rem; flex-wrap:wrap; padding:0.6rem; background:#f4f4f2; border:1px solid var(--border); border-bottom:none; border-radius:2px 2px 0 0; }
+.editor-toolbar { display:flex; gap:0.4rem; flex-wrap:wrap; padding:0.6rem; background:#f4f3f0; border:1px solid var(--border); border-bottom:none; border-radius:2px 2px 0 0; }
 .tb-btn { padding:0.3rem 0.6rem; border:1px solid var(--border); background:#fff; cursor:pointer; font-size:0.85rem; border-radius:2px; font-family:var(--font-sans); transition:all 0.15s; }
 .tb-btn:hover { background:var(--charcoal); color:#fff; }
 .editor-area { min-height:320px; padding:1rem; border:1px solid var(--border); font-family:var(--font-sans); font-size:0.95rem; line-height:1.8; outline:none; border-radius:0 0 2px 2px; background:#fafaf8; }
-.editor-area:focus { border-color: var(--teal); }
+.editor-area:focus { border-color:var(--teal); }
 
-/* Stats */
-.admin-stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; margin-bottom:2rem; }
+.admin-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:2rem; }
 .stat-card { background:#fff; border:1px solid var(--border); padding:1.5rem; border-radius:4px; text-align:center; }
 .stat-card .stat-num { font-family:var(--font-serif); font-size:2.5rem; color:var(--charcoal); }
 .stat-card .stat-label { font-size:0.8rem; color:var(--text-muted); letter-spacing:0.05em; text-transform:uppercase; margin-top:0.3rem; }
 
 .empty-state { text-align:center; padding:3rem; color:var(--text-muted); }
-.empty-state p:first-child { font-size:2.5rem; }
 
-/* Tag preview */
+/* Spinner */
+.spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.4); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:6px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* API banner */
+.api-banner { background:#fff3cd; border:1px solid #ffc107; padding:1rem 1.5rem; border-radius:4px; margin-bottom:2rem; font-size:0.88rem; line-height:1.6; }
+.api-banner strong { display:block; margin-bottom:0.3rem; color:#856404; }
+.api-banner code { background:#ffeaa0; padding:0.1rem 0.4rem; border-radius:2px; font-family:monospace; font-size:0.85rem; }
+
 .content-preview { font-size:0.85rem; color:var(--text-muted); margin-top:0.4rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:500px; }
 
 @media(max-width:640px) {
@@ -91,72 +97,88 @@ body { background: #f4f4f2; }
 </nav>
 
 <div style="padding-top:80px;">
-  <div class="admin-wrap">
+<div class="admin-wrap">
 
-    <div class="admin-header">
-      <h1>Article Manager</h1>
+  <div class="admin-header">
+    <h1>Article Manager</h1>
+    <div class="admin-header-links">
       <a href="articles.html" target="_blank">↗ View Public Articles</a>
+      <button class="btn btn-outline" style="font-size:0.8rem;" onclick="refreshAll()">↻ Refresh</button>
     </div>
+  </div>
 
-    <!-- Stats -->
-    <div class="admin-stats" id="adminStats"></div>
+  <!-- API URL banner (shown only if not set) -->
+  <div class="api-banner" id="apiBanner" style="display:none;">
+    <strong>⚠ Setup Required — Paste your Apps Script URL in app.js</strong>
+    Open <code>app.js</code> and replace <code>YOUR_APPS_SCRIPT_WEB_APP_URL_HERE</code> with the Web App URL from your Google Apps Script deployment. See <code>google-apps-script.js</code> for instructions.
+  </div>
 
-    <!-- Tabs -->
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="showTab('tabList')">Published Articles</button>
-      <button class="admin-tab" onclick="showTab('tabNew')" id="tabNewBtn">+ New Article</button>
+  <!-- Stats -->
+  <div class="admin-stats" id="adminStats">
+    <div class="stat-card"><div class="stat-num">…</div><div class="stat-label">Published</div></div>
+    <div class="stat-card"><div class="stat-num">…</div><div class="stat-label">Drafts</div></div>
+    <div class="stat-card"><div class="stat-num">…</div><div class="stat-label">Categories</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="showTab('tabList')">All Articles</button>
+    <button class="admin-tab" onclick="showTab('tabNew')">+ New Article</button>
+  </div>
+
+  <!-- LIST TAB -->
+  <div id="tabList" class="tab-pane active">
+    <div id="articleListContainer" class="article-list">
+      <div class="empty-state"><p>Loading…</p></div>
     </div>
+  </div>
 
-    <!-- LIST TAB -->
-    <div id="tabList" class="tab-pane active">
-      <div id="articleListContainer" class="article-list"></div>
-    </div>
-
-    <!-- NEW / EDIT TAB -->
-    <div id="tabNew" class="tab-pane">
-      <div class="admin-form">
-        <input type="hidden" id="editId">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Article Title *</label>
-            <input type="text" id="aTitle" placeholder="e.g. Understanding GST Input Tax Credit Rules">
-          </div>
-          <div class="form-group">
-            <label>Category *</label>
-            <select id="aCategory">
-              <option value="">— Select —</option>
-              <option>Income Tax</option>
-              <option>GST</option>
-              <option>Audit & Assurance</option>
-              <option>Accounting</option>
-              <option>Regulatory Updates</option>
-              <option>General</option>
-            </select>
-          </div>
+  <!-- EDITOR TAB -->
+  <div id="tabNew" class="tab-pane">
+    <div class="admin-form">
+      <input type="hidden" id="editId">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Article Title *</label>
+          <input type="text" id="aTitle" placeholder="e.g. Understanding GST Input Tax Credit Rules">
         </div>
         <div class="form-group">
-          <label>Summary / Excerpt *</label>
-          <input type="text" id="aSummary" placeholder="A brief one-line summary shown in listing pages">
+          <label>Category *</label>
+          <select id="aCategory">
+            <option value="">— Select —</option>
+            <option>Income Tax</option>
+            <option>GST</option>
+            <option>Audit & Assurance</option>
+            <option>Accounting</option>
+            <option>Regulatory Updates</option>
+            <option>General</option>
+          </select>
         </div>
-        <div class="form-group">
-          <label>Author</label>
-          <input type="text" id="aAuthor" value="CA Swastik Jain" placeholder="CA Swastik Jain">
+      </div>
+      <div class="form-group">
+        <label>Summary / Excerpt *</label>
+        <input type="text" id="aSummary" placeholder="A brief one-line summary shown on listing pages">
+      </div>
+      <div class="form-group">
+        <label>Author</label>
+        <input type="text" id="aAuthor" value="CA Swastik Jain">
+      </div>
+      <div class="form-group">
+        <label>Article Body *</label>
+        <div class="editor-toolbar">
+          <button class="tb-btn" title="Bold" onclick="fmt('bold')"><b>B</b></button>
+          <button class="tb-btn" title="Italic" onclick="fmt('italic')"><i>I</i></button>
+          <button class="tb-btn" title="Underline" onclick="fmt('underline')"><u>U</u></button>
+          <button class="tb-btn" onclick="fmt('insertOrderedList')">1. List</button>
+          <button class="tb-btn" onclick="fmt('insertUnorderedList')">• List</button>
+          <button class="tb-btn" onclick="document.execCommand('formatBlock',false,'h2')">H2</button>
+          <button class="tb-btn" onclick="document.execCommand('formatBlock',false,'h3')">H3</button>
+          <button class="tb-btn" onclick="document.execCommand('insertHorizontalRule',false,null)">— HR</button>
+          <button class="tb-btn" onclick="fmt('removeFormat')">Clear</button>
         </div>
-        <div class="form-group">
-          <label>Article Body *</label>
-          <div class="editor-toolbar">
-            <button class="tb-btn" title="Bold" onclick="fmt('bold')"><b>B</b></button>
-            <button class="tb-btn" title="Italic" onclick="fmt('italic')"><i>I</i></button>
-            <button class="tb-btn" title="Underline" onclick="fmt('underline')"><u>U</u></button>
-            <button class="tb-btn" onclick="fmt('insertOrderedList')">1. List</button>
-            <button class="tb-btn" onclick="fmt('insertUnorderedList')">• List</button>
-            <button class="tb-btn" onclick="insertHeading()">H2</button>
-            <button class="tb-btn" onclick="insertHeading3()">H3</button>
-            <button class="tb-btn" onclick="insertDivider()">— HR</button>
-            <button class="tb-btn" onclick="fmt('removeFormat')">Clear</button>
-          </div>
-          <div id="aBody" class="editor-area" contenteditable="true" spellcheck="true"></div>
-        </div>
+        <div id="aBody" class="editor-area" contenteditable="true" spellcheck="true"></div>
+      </div>
+      <div class="form-row">
         <div class="form-group">
           <label>Publication Date</label>
           <input type="date" id="aDate">
@@ -168,155 +190,181 @@ body { background: #f4f4f2; }
             <option value="draft">Draft</option>
           </select>
         </div>
-        <div class="admin-actions">
-          <button class="btn btn-primary" onclick="saveArticle()">Save Article</button>
-          <button class="btn btn-outline" onclick="clearForm()">Clear Form</button>
-          <button class="btn-danger" id="deleteBtn" onclick="deleteArticle()" style="display:none;">Delete Article</button>
-        </div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn btn-primary" id="saveBtn" onclick="saveArticle()">Save Article</button>
+        <button class="btn btn-outline" onclick="clearForm()">Clear</button>
+        <button class="btn-danger" id="deleteBtn" onclick="deleteArticle()" style="display:none;">Delete Article</button>
+        <span id="saveStatus" style="font-size:0.82rem;color:var(--text-muted);"></span>
       </div>
     </div>
-
   </div>
+
+</div>
 </div>
 
 <script src="app.js"></script>
 <script>
-// ── Admin CMS Logic ──
+// ── Check if API URL is configured ──────────────
+if (typeof API_URL !== 'undefined' && API_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+  document.getElementById('apiBanner').style.display = 'block';
+}
 
+// ── Tab switching ───────────────────────────────
 function showTab(id) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  const tabIndex = id === 'tabList' ? 0 : 1;
-  document.querySelectorAll('.admin-tab')[tabIndex].classList.add('active');
-  if (id === 'tabList') { renderList(); clearForm(); }
+  document.querySelectorAll('.admin-tab')[id === 'tabList' ? 0 : 1].classList.add('active');
+  if (id === 'tabList') { clearForm(); loadList(); }
 }
 
-// Today date default
-document.getElementById('aDate').value = new Date().toISOString().split('T')[0];
-
+// ── Rich text editor ────────────────────────────
 function fmt(cmd) {
   document.execCommand(cmd, false, null);
   document.getElementById('aBody').focus();
 }
-function insertHeading() {
-  document.execCommand('formatBlock', false, 'h2');
-  document.getElementById('aBody').focus();
-}
-function insertHeading3() {
-  document.execCommand('formatBlock', false, 'h3');
-  document.getElementById('aBody').focus();
-}
-function insertDivider() {
-  document.execCommand('insertHorizontalRule', false, null);
-  document.getElementById('aBody').focus();
-}
 
-function saveArticle() {
-  const title = document.getElementById('aTitle').value.trim();
+// ── Default date ─────────────────────────────────
+document.getElementById('aDate').value = new Date().toISOString().split('T')[0];
+
+// ── Save (Create or Update) ──────────────────────
+async function saveArticle() {
+  const title    = document.getElementById('aTitle').value.trim();
   const category = document.getElementById('aCategory').value;
-  const summary = document.getElementById('aSummary').value.trim();
-  const author = document.getElementById('aAuthor').value.trim() || 'CA Swastik Jain';
-  const body = document.getElementById('aBody').innerHTML.trim();
-  const date = document.getElementById('aDate').value;
-  const status = document.getElementById('aStatus').value;
-  const editId = document.getElementById('editId').value;
+  const summary  = document.getElementById('aSummary').value.trim();
+  const author   = document.getElementById('aAuthor').value.trim() || 'CA Swastik Jain';
+  const body     = document.getElementById('aBody').innerHTML.trim();
+  const date     = document.getElementById('aDate').value;
+  const status   = document.getElementById('aStatus').value;
+  const editId   = document.getElementById('editId').value;
 
   if (!title || !category || !summary || !body) {
-    alert('Please fill in Title, Category, Summary, and Article Body.');
+    showToast('Please fill in Title, Category, Summary, and Body.', 'error');
     return;
   }
 
-  const articles = getArticles();
-  if (editId) {
-    const idx = articles.findIndex(a => a.id === editId);
-    if (idx > -1) {
-      articles[idx] = { ...articles[idx], title, category, summary, author, body, date, status, updatedAt: new Date().toISOString() };
+  const btn = document.getElementById('saveBtn');
+  const statusEl = document.getElementById('saveStatus');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Saving…';
+  statusEl.textContent = '';
+
+  try {
+    if (editId) {
+      await apiPost({ action: 'update', article: { id: editId, title, category, summary, author, body, date, status } });
+      showToast('Article updated successfully.');
+    } else {
+      const id = 'art_' + Date.now();
+      await apiPost({ action: 'create', article: { id, title, category, summary, author, body, date, status, createdAt: new Date().toISOString() } });
+      showToast('Article published successfully.');
     }
-  } else {
-    articles.unshift({
-      id: 'art_' + Date.now(),
-      title, category, summary, author, body, date,
-      status,
-      createdAt: new Date().toISOString()
-    });
+    clearCache();
+    clearForm();
+    showTab('tabList');
+  } catch (err) {
+    showToast('Save failed. Check your API URL and try again.', 'error');
+    statusEl.textContent = 'Error: ' + err.message;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Save Article';
   }
-  saveArticles(articles);
-  updateStats();
-  clearForm();
-  showTab('tabList');
 }
 
-function clearForm() {
-  document.getElementById('editId').value = '';
-  document.getElementById('aTitle').value = '';
-  document.getElementById('aCategory').value = '';
-  document.getElementById('aSummary').value = '';
-  document.getElementById('aAuthor').value = 'CA Swastik Jain';
-  document.getElementById('aBody').innerHTML = '';
-  document.getElementById('aDate').value = new Date().toISOString().split('T')[0];
-  document.getElementById('aStatus').value = 'published';
-  document.getElementById('deleteBtn').style.display = 'none';
-}
-
-function editArticle(id) {
-  const articles = getArticles();
-  const art = articles.find(a => a.id === id);
-  if (!art) return;
-  document.getElementById('editId').value = art.id;
-  document.getElementById('aTitle').value = art.title;
-  document.getElementById('aCategory').value = art.category;
-  document.getElementById('aSummary').value = art.summary;
-  document.getElementById('aAuthor').value = art.author;
-  document.getElementById('aBody').innerHTML = art.body;
-  document.getElementById('aDate').value = art.date;
-  document.getElementById('aStatus').value = art.status || 'published';
-  document.getElementById('deleteBtn').style.display = 'block';
+// ── Edit ─────────────────────────────────────────
+function editArticle(art) {
+  document.getElementById('editId').value      = art.id;
+  document.getElementById('aTitle').value      = art.title;
+  document.getElementById('aCategory').value   = art.category;
+  document.getElementById('aSummary').value    = art.summary;
+  document.getElementById('aAuthor').value     = art.author;
+  document.getElementById('aBody').innerHTML   = art.body;
+  document.getElementById('aDate').value       = art.date;
+  document.getElementById('aStatus').value     = art.status || 'published';
+  document.getElementById('deleteBtn').style.display = 'inline-block';
   showTab('tabNew');
   window.scrollTo({ top: 200, behavior: 'smooth' });
 }
 
-function deleteArticle() {
+// ── Delete ────────────────────────────────────────
+async function deleteArticle() {
   const id = document.getElementById('editId').value;
   if (!id) return;
-  if (!confirm('Delete this article? This cannot be undone.')) return;
-  const articles = getArticles().filter(a => a.id !== id);
-  saveArticles(articles);
-  updateStats();
-  clearForm();
-  showTab('tabList');
-}
+  if (!confirm('Delete this article permanently? This cannot be undone.')) return;
 
-function renderList() {
-  const articles = getArticles();
-  const container = document.getElementById('articleListContainer');
-  if (articles.length === 0) {
-    container.innerHTML = '<div class="empty-state"><p>◻</p><p>No articles yet. Click "+ New Article" to create your first one.</p></div>';
-    return;
+  const btn = document.getElementById('deleteBtn');
+  btn.disabled = true;
+  btn.textContent = 'Deleting…';
+
+  try {
+    await apiPost({ action: 'delete', id });
+    showToast('Article deleted.');
+    clearCache();
+    clearForm();
+    showTab('tabList');
+  } catch {
+    showToast('Delete failed. Please try again.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Delete Article';
   }
-  container.innerHTML = articles.map(art => `
-    <div class="article-list-item">
-      <div class="ali-info">
-        <h3>${art.title}${art.status === 'draft' ? ' <span style="font-size:0.7rem;background:#f39c12;color:#fff;padding:0.15rem 0.5rem;border-radius:100px;vertical-align:middle;">Draft</span>' : ''}</h3>
-        <div class="ali-meta">
-          ${formatDate(art.date)} · ${art.author}
-          <span class="ali-cat">${art.category}</span>
-        </div>
-        <div class="content-preview">${art.summary}</div>
-      </div>
-      <div class="ali-actions">
-        <button class="btn-sm" onclick="editArticle('${art.id}')">Edit</button>
-        <a href="article.html?id=${art.id}" target="_blank" class="btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">View ↗</a>
-      </div>
-    </div>
-  `).join('');
 }
 
-function updateStats() {
-  const articles = getArticles();
+// ── Clear form ────────────────────────────────────
+function clearForm() {
+  document.getElementById('editId').value    = '';
+  document.getElementById('aTitle').value    = '';
+  document.getElementById('aCategory').value = '';
+  document.getElementById('aSummary').value  = '';
+  document.getElementById('aAuthor').value   = 'CA Swastik Jain';
+  document.getElementById('aBody').innerHTML = '';
+  document.getElementById('aDate').value     = new Date().toISOString().split('T')[0];
+  document.getElementById('aStatus').value   = 'published';
+  document.getElementById('deleteBtn').style.display = 'none';
+  document.getElementById('saveStatus').textContent  = '';
+}
+
+// ── Load & render list ────────────────────────────
+async function loadList() {
+  const container = document.getElementById('articleListContainer');
+  container.innerHTML = '<div class="empty-state"><p>Loading from Google Sheets…</p></div>';
+
+  try {
+    const articles = await fetchArticles(true); // always fresh in admin
+    updateStats(articles);
+
+    if (articles.length === 0) {
+      container.innerHTML = '<div class="empty-state"><p>◻</p><p>No articles yet. Click "+ New Article" to create your first one.</p></div>';
+      return;
+    }
+
+    container.innerHTML = articles.map(art => `
+      <div class="article-list-item">
+        <div class="ali-info">
+          <h3>
+            ${art.title}
+            ${art.status === 'draft' ? '<span class="ali-draft">Draft</span>' : ''}
+          </h3>
+          <div class="ali-meta">
+            ${formatDate(art.date)} · ${art.author}
+            <span class="ali-cat">${art.category}</span>
+          </div>
+          <div class="content-preview">${art.summary}</div>
+        </div>
+        <div class="ali-actions">
+          <button class="btn-sm" onclick='editArticle(${JSON.stringify(art).replace(/'/g,"&#39;")})'>Edit</button>
+          <a href="article.html?id=${art.id}" target="_blank" class="btn-sm">View ↗</a>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    container.innerHTML = `<div class="empty-state"><p>⚠</p><p>Could not load articles. Check your API URL in app.js.</p><p style="font-size:0.8rem;margin-top:0.5rem;color:var(--text-light)">${err.message}</p></div>`;
+  }
+}
+
+function updateStats(articles) {
   const published = articles.filter(a => a.status !== 'draft').length;
-  const drafts = articles.filter(a => a.status === 'draft').length;
-  const cats = [...new Set(articles.map(a => a.category))].length;
+  const drafts    = articles.filter(a => a.status === 'draft').length;
+  const cats      = new Set(articles.map(a => a.category)).size;
   document.getElementById('adminStats').innerHTML = `
     <div class="stat-card"><div class="stat-num">${published}</div><div class="stat-label">Published</div></div>
     <div class="stat-card"><div class="stat-num">${drafts}</div><div class="stat-label">Drafts</div></div>
@@ -324,9 +372,10 @@ function updateStats() {
   `;
 }
 
-// Init
-renderList();
-updateStats();
+function refreshAll() { clearCache(); loadList(); showToast('Refreshed from Google Sheets.'); }
+
+// ── Init ──────────────────────────────────────────
+loadList();
 </script>
 </body>
 </html>
