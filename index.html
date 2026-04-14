@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Swastik Jain & Co. | Chartered Accountants</title>
 <meta name="description" content="Swastik Jain & Co. – Chartered Accountant firm in Indore, Madhya Pradesh, offering professional services in taxation, accounting, GST, and regulatory compliance.">
-<meta name="keywords" content="Chartered Accountant Indore, CA firm Madhya Pradesh, GST compliance, income tax advisory, audit services, accounting firm India">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-brand">
@@ -26,6 +24,7 @@
       <li><a href="index.html" class="active">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="services.html">Services</a></li>
+      <li><a href="careers.html">Careers</a></li>
       <li><a href="articles.html">Articles</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
@@ -57,39 +56,94 @@
     <div class="section-label">Professional Services</div>
     <h2 class="section-title">Areas of Practice</h2>
     <div class="services-grid">
-      <div class="service-card" style="--i:1">
-        <div class="service-icon">§</div>
+      <a class="service-card" style="--i:1" href="#" onclick="openModal('income-tax');return false;">
         <h3>Income Tax</h3>
         <p>Compliance and advisory services in direct taxation under the Income Tax Act, 1961.</p>
-      </div>
-      <div class="service-card" style="--i:2">
-        <div class="service-icon">◈</div>
+      </a>
+      <a class="service-card" style="--i:2" href="#" onclick="openModal('gst');return false;">
         <h3>GST Compliance</h3>
         <p>Assistance with Goods and Services Tax registration, return filing, and advisory.</p>
-      </div>
-      <div class="service-card" style="--i:3">
-        <div class="service-icon">◻</div>
+      </a>
+      <a class="service-card" style="--i:3" href="#" onclick="openModal('audit');return false;">
         <h3>Audit & Assurance</h3>
         <p>Statutory, internal, and tax audit engagements conducted per applicable standards.</p>
-      </div>
-      <div class="service-card" style="--i:4">
-        <div class="service-icon">≡</div>
+      </a>
+      <a class="service-card" style="--i:4" href="#" onclick="openModal('accounting');return false;">
         <h3>Accounting</h3>
         <p>Bookkeeping and financial statement preparation in accordance with applicable frameworks.</p>
-      </div>
-      <div class="service-card" style="--i:5">
-        <div class="service-icon">⬡</div>
+      </a>
+      <a class="service-card" style="--i:5" href="#" onclick="openModal('registration');return false;">
         <h3>Business Registration</h3>
         <p>Support with entity incorporation, regulatory registrations, and compliance setup.</p>
-      </div>
-      <div class="service-card" style="--i:6">
-        <div class="service-icon">◇</div>
+      </a>
+      <a class="service-card" style="--i:6" href="#" onclick="openModal('compliance');return false;">
         <h3>Compliance Advisory</h3>
         <p>Guidance on financial and regulatory compliance matters as per applicable law.</p>
-      </div>
+      </a>
+      <a class="service-card" style="--i:7" href="#" onclick="openModal('vcfo');return false;">
+        <h3>Virtual CFO Services</h3>
+        <p>Outsourced CFO support for businesses requiring strategic financial oversight.</p>
+      </a>
+      <a class="service-card" style="--i:8" href="#" onclick="openModal('bizfinance');return false;">
+        <h3>Business Finance</h3>
+        <p>Assistance with loan documentation, project reports, and financial planning.</p>
+      </a>
+      <a class="service-card" style="--i:9" href="#" onclick="openModal('litigation');return false;">
+        <h3>Core Litigation</h3>
+        <p>Representation and advisory in Indirect & Direct Tax disputes and proceedings.</p>
+      </a>
     </div>
     <div class="section-cta">
       <a href="services.html" class="btn btn-outline">View All Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE MODALS -->
+<div class="service-modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="service-modal" id="serviceModal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- USEFUL WEBSITES -->
+<section class="useful-links-section">
+  <div class="container">
+    <div class="section-label">Quick Access</div>
+    <h2 class="section-title" style="margin-bottom:0.5rem;">Useful Government Portals</h2>
+    <p style="color:var(--text-muted);margin-bottom:0;">Important regulatory websites for your reference.</p>
+    <div class="useful-links-grid">
+      <a class="useful-link-card" href="https://www.gst.gov.in" target="_blank" rel="noopener">
+        <span class="useful-link-icon">🧾</span>
+        <span class="useful-link-name">GST Portal</span>
+        <span class="useful-link-desc">gst.gov.in</span>
+      </a>
+      <a class="useful-link-card" href="https://www.incometax.gov.in" target="_blank" rel="noopener">
+        <span class="useful-link-icon">💰</span>
+        <span class="useful-link-name">Income Tax</span>
+        <span class="useful-link-desc">incometax.gov.in</span>
+      </a>
+      <a class="useful-link-card" href="https://www.cbic.gov.in" target="_blank" rel="noopener">
+        <span class="useful-link-icon">🏛️</span>
+        <span class="useful-link-name">CBIC</span>
+        <span class="useful-link-desc">cbic.gov.in</span>
+      </a>
+      <a class="useful-link-card" href="https://www.mca.gov.in" target="_blank" rel="noopener">
+        <span class="useful-link-icon">🏢</span>
+        <span class="useful-link-name">MCA</span>
+        <span class="useful-link-desc">mca.gov.in</span>
+      </a>
+      <a class="useful-link-card" href="https://www.epfindia.gov.in" target="_blank" rel="noopener">
+        <span class="useful-link-icon">📋</span>
+        <span class="useful-link-name">PF (EPFO)</span>
+        <span class="useful-link-desc">epfindia.gov.in</span>
+      </a>
+      <a class="useful-link-card" href="https://www.esic.gov.in" target="_blank" rel="noopener">
+        <span class="useful-link-icon">🏥</span>
+        <span class="useful-link-name">ESIC</span>
+        <span class="useful-link-desc">esic.gov.in</span>
+      </a>
     </div>
   </div>
 </section>
@@ -108,30 +162,6 @@
   </div>
 </section>
 
-<!-- APPROACH STRIP -->
-<section class="approach-strip">
-  <div class="container">
-    <div class="approach-items">
-      <div class="approach-item">
-        <span class="approach-num">01</span>
-        <p>Adherence to applicable laws and professional standards</p>
-      </div>
-      <div class="approach-item">
-        <span class="approach-num">02</span>
-        <p>Focus on accuracy and thorough documentation</p>
-      </div>
-      <div class="approach-item">
-        <span class="approach-num">03</span>
-        <p>Timely compliance with statutory requirements</p>
-      </div>
-      <div class="approach-item">
-        <span class="approach-num">04</span>
-        <p>Structured and process-driven execution</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- FOOTER -->
 <footer class="footer">
   <div class="container">
@@ -139,7 +169,7 @@
       <div class="footer-brand">
         <span class="brand-mark">⬡</span>
         <strong>Swastik Jain & Co.</strong>
-        <p>Chartered Accountants<br>Indore, Madhya Pradesh</p>
+        <p>Chartered Accountants<br>51A, Sainath Colony<br>Indore – 452001, MP</p>
       </div>
       <div class="footer-nav">
         <strong>Navigation</strong>
@@ -147,15 +177,17 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="services.html">Services</a></li>
+          <li><a href="careers.html">Careers</a></li>
           <li><a href="articles.html">Articles</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="footer-contact">
         <strong>Contact</strong>
-        <p>Email: info@swastikjainco.com<br>
-        Phone: +91 XXXXX XXXXX<br>
-        Indore, MP – 452001</p>
+        <p>Email: caswastikjain11@gmail.com<br>
+        Phone: +91 79996 64769<br>
+        51A, Sainath Colony<br>
+        Indore – 452001, MP</p>
       </div>
     </div>
     <div class="footer-disclaimer">
@@ -168,6 +200,148 @@
 </footer>
 
 <script src="app.js"></script>
-<script>renderHomeArticles();</script>
+<script>
+renderHomeArticles();
+
+const SERVICE_DATA = {
+  'income-tax': {
+    tag: 'Direct Taxation',
+    title: 'Income Tax Compliance & Advisory',
+    body: `<p>The firm provides assistance with income tax compliance including preparation and filing of income tax returns for individuals, firms, and companies. Advisory is provided in relation to applicable provisions of the Income Tax Act, 1961, including matters related to deductions, exemptions, and advance tax computations.</p>
+    <ul>
+      <li>Income Tax Return preparation and filing</li>
+      <li>Advance Tax computation and payment assistance</li>
+      <li>TDS/TCS compliance and returns</li>
+      <li>Tax law research and advisory</li>
+      <li>Representation support before authorities</li>
+      <li>Review of Annual Information Statement (AIS)</li>
+    </ul>`
+  },
+  'gst': {
+    tag: 'Indirect Taxation',
+    title: 'GST Compliance & Advisory',
+    body: `<p>The firm undertakes assignments related to Goods and Services Tax (GST) compliance, including registration, periodic return filing, and reconciliation. Advisory is provided on the applicable provisions of the CGST Act, 2017 and related rules.</p>
+    <ul>
+      <li>GST registration and amendments</li>
+      <li>GSTR-1, GSTR-3B, and annual return filing</li>
+      <li>Input Tax Credit reconciliation (GSTR-2B)</li>
+      <li>GST audit under Section 35(5)</li>
+      <li>E-Way Bill advisory and compliance</li>
+      <li>Representation in GST proceedings</li>
+    </ul>`
+  },
+  'audit': {
+    tag: 'Audit & Assurance',
+    title: 'Audit & Assurance Services',
+    body: `<p>The firm conducts audit engagements in accordance with the Standards on Auditing issued by ICAI, providing independent assessment of financial statements and internal processes.</p>
+    <ul>
+      <li>Statutory audit under applicable laws</li>
+      <li>Tax audit under Section 44AB</li>
+      <li>Internal audit and process review</li>
+      <li>GST audit</li>
+      <li>Stock audit and physical verification</li>
+    </ul>`
+  },
+  'accounting': {
+    tag: 'Accounting',
+    title: 'Accounting & Bookkeeping',
+    body: `<p>The firm provides accounting and bookkeeping services to businesses and individuals. Financial statements are prepared in accordance with applicable accounting standards.</p>
+    <ul>
+      <li>Bookkeeping and ledger maintenance (Tally/other software)</li>
+      <li>Financial statement preparation</li>
+      <li>Bank reconciliation statements</li>
+      <li>Payroll accounting and processing</li>
+      <li>Management Information Reports (MIS)</li>
+    </ul>`
+  },
+  'registration': {
+    tag: 'Business Registration',
+    title: 'Business Registration & Regulatory Support',
+    body: `<p>The firm assists in the formation and registration of business entities and obtaining various statutory registrations as required by applicable laws.</p>
+    <ul>
+      <li>Company and LLP incorporation</li>
+      <li>Partnership firm registration</li>
+      <li>PAN, TAN, and GST registration</li>
+      <li>MSME / Udyam registration</li>
+      <li>Shops & Establishment registration</li>
+      <li>Import Export Code (IEC)</li>
+    </ul>`
+  },
+  'compliance': {
+    tag: 'Advisory',
+    title: 'Financial & Compliance Advisory',
+    body: `<p>The firm provides advisory on financial and regulatory compliance matters relevant to applicable laws, assisting in structuring transactions and preparing required documentation.</p>
+    <ul>
+      <li>Regulatory compliance review</li>
+      <li>Documentation and due diligence support</li>
+      <li>Transaction structuring (compliance perspective)</li>
+      <li>Liaison with regulatory authorities</li>
+    </ul>`
+  },
+  'vcfo': {
+    tag: 'Virtual CFO',
+    title: 'Virtual CFO Services',
+    body: `<p>Our Virtual CFO service provides growing businesses access to experienced financial leadership without the cost of a full-time CFO. We act as a strategic financial partner, overseeing your financial operations, planning, and compliance.</p>
+    <ul>
+      <li>Financial planning & budgeting</li>
+      <li>Cash flow management and forecasting</li>
+      <li>Investor reporting and board presentations</li>
+      <li>Cost optimisation and profitability analysis</li>
+      <li>Fund-raising support and business valuation assistance</li>
+      <li>Coordination with auditors, banks, and regulators</li>
+    </ul>`
+  },
+  'bizfinance': {
+    tag: 'Business Finance',
+    title: 'Business Finance',
+    body: `<p>The firm assists businesses in accessing finance through proper documentation, project reports, and financial structuring aligned with bank and NBFC requirements.</p>
+    <ul>
+      <li>Preparation of Detailed Project Reports (DPR)</li>
+      <li>CMA Data preparation for bank loans</li>
+      <li>Working capital and term loan documentation</li>
+      <li>MSME loan and subsidy assistance</li>
+      <li>Balance sheet strengthening advisory</li>
+      <li>Financial modelling and projections</li>
+    </ul>`
+  },
+  'litigation': {
+    tag: 'Litigation',
+    title: 'Core Litigation – Indirect & Direct Taxes',
+    body: `<p>The firm provides representation and advisory support in tax disputes before various authorities under both direct and indirect tax laws.</p>
+    <ul>
+      <li>Drafting replies to GST show cause notices (SCN)</li>
+      <li>Representation before GST appellate authorities</li>
+      <li>Income Tax scrutiny assessment support</li>
+      <li>Filing appeals before CIT(A) / ITAT</li>
+      <li>Penalty proceedings under Income Tax Act</li>
+      <li>Advisory on litigation strategy and risk assessment</li>
+    </ul>`
+  }
+};
+
+function openModal(key) {
+  const d = SERVICE_DATA[key];
+  if (!d) return;
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-tag">${d.tag}</div>
+    <h2 class="modal-title">${d.title}</h2>
+    <div class="modal-body">${d.body}</div>
+    <div class="modal-cta">
+      <a href="services.html" class="btn btn-outline" style="font-size:0.8rem;">View All Services</a>
+      <a href="contact.html" class="btn btn-primary" style="font-size:0.8rem;">Submit Enquiry</a>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModalBtn() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalBtn();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
+</script>
 </body>
 </html>

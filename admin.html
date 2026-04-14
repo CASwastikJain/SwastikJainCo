@@ -3,330 +3,317 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin – Article Manager | Swastik Jain & Co.</title>
+<title>Admin | Swastik Jain & Co.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<style>
-/* ── Admin-specific styles ── */
-body { background: #f4f4f2; }
-.admin-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-.admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 2.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border); }
-.admin-header h1 { font-family: var(--font-serif); font-size: 2rem; }
-.admin-header a { font-size:0.85rem; color: var(--text-muted); text-decoration:none; }
-.admin-header a:hover { color: var(--teal); }
-.admin-tabs { display:flex; gap:0.5rem; margin-bottom:2rem; }
-.admin-tab { padding:0.55rem 1.4rem; border:1px solid var(--border); background:#fff; cursor:pointer; font-family:var(--font-sans); font-size:0.85rem; letter-spacing:0.04em; transition: all 0.2s; border-radius:2px; }
-.admin-tab.active { background:var(--charcoal); color:#fff; border-color:var(--charcoal); }
-.tab-pane { display:none; }
-.tab-pane.active { display:block; }
-
-/* Form */
-.admin-form { background:#fff; border:1px solid var(--border); padding:2rem; border-radius:4px; }
-.admin-form .form-group { margin-bottom:1.4rem; }
-.admin-form label { display:block; font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.5rem; font-family:var(--font-sans); }
-.admin-form input, .admin-form select, .admin-form textarea { width:100%; padding:0.75rem 1rem; border:1px solid var(--border); background:#fafaf8; font-family:var(--font-sans); font-size:0.95rem; color:var(--charcoal); border-radius:2px; transition: border-color 0.2s; box-sizing:border-box; }
-.admin-form input:focus, .admin-form select:focus, .admin-form textarea:focus { outline:none; border-color:var(--teal); }
-.admin-form textarea { resize: vertical; min-height: 300px; line-height:1.8; }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-.admin-actions { display:flex; gap:1rem; align-items:center; padding-top:1rem; border-top:1px solid var(--border); }
-.btn-danger { background:#c0392b; color:#fff; border:none; padding:0.7rem 1.4rem; cursor:pointer; font-family:var(--font-sans); font-size:0.85rem; letter-spacing:0.05em; border-radius:2px; }
-
-/* Article list */
-.article-list { display:flex; flex-direction:column; gap:1rem; }
-.article-list-item { background:#fff; border:1px solid var(--border); padding:1.5rem; display:flex; justify-content:space-between; align-items:flex-start; border-radius:4px; }
-.ali-info h3 { font-family:var(--font-serif); font-size:1.2rem; margin-bottom:0.3rem; }
-.ali-info .ali-meta { font-size:0.8rem; color:var(--text-muted); letter-spacing:0.03em; }
-.ali-info .ali-cat { display:inline-block; background:var(--teal-light); color:var(--teal); padding:0.15rem 0.6rem; border-radius:100px; font-size:0.75rem; margin-left:0.5rem; }
-.ali-actions { display:flex; gap:0.5rem; flex-shrink:0; margin-left:2rem; }
-.btn-sm { padding:0.4rem 0.9rem; font-size:0.8rem; border-radius:2px; cursor:pointer; font-family:var(--font-sans); letter-spacing:0.04em; border:1px solid var(--border); background:#fff; transition:all 0.2s; }
-.btn-sm:hover { background:var(--charcoal); color:#fff; border-color:var(--charcoal); }
-.btn-sm.danger:hover { background:#c0392b; border-color:#c0392b; }
-
-/* Rich editor toolbar */
-.editor-toolbar { display:flex; gap:0.4rem; flex-wrap:wrap; padding:0.6rem; background:#f4f4f2; border:1px solid var(--border); border-bottom:none; border-radius:2px 2px 0 0; }
-.tb-btn { padding:0.3rem 0.6rem; border:1px solid var(--border); background:#fff; cursor:pointer; font-size:0.85rem; border-radius:2px; font-family:var(--font-sans); transition:all 0.15s; }
-.tb-btn:hover { background:var(--charcoal); color:#fff; }
-.editor-area { min-height:320px; padding:1rem; border:1px solid var(--border); font-family:var(--font-sans); font-size:0.95rem; line-height:1.8; outline:none; border-radius:0 0 2px 2px; background:#fafaf8; }
-.editor-area:focus { border-color: var(--teal); }
-
-/* Stats */
-.admin-stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; margin-bottom:2rem; }
-.stat-card { background:#fff; border:1px solid var(--border); padding:1.5rem; border-radius:4px; text-align:center; }
-.stat-card .stat-num { font-family:var(--font-serif); font-size:2.5rem; color:var(--charcoal); }
-.stat-card .stat-label { font-size:0.8rem; color:var(--text-muted); letter-spacing:0.05em; text-transform:uppercase; margin-top:0.3rem; }
-
-.empty-state { text-align:center; padding:3rem; color:var(--text-muted); }
-.empty-state p:first-child { font-size:2.5rem; }
-
-/* Tag preview */
-.content-preview { font-size:0.85rem; color:var(--text-muted); margin-top:0.4rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:500px; }
-
-@media(max-width:640px) {
-  .form-row { grid-template-columns:1fr; }
-  .admin-stats { grid-template-columns:1fr; }
-  .article-list-item { flex-direction:column; gap:1rem; }
-  .ali-actions { margin-left:0; }
-}
-</style>
+<meta name="robots" content="noindex, nofollow">
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div class="admin-wrap" id="loginScreen">
+  <div class="admin-login-card">
+    <h1>Admin Portal</h1>
+    <p>Swastik Jain & Co. — Restricted Access</p>
+    <div class="form-group">
+      <label for="adminUser">Username</label>
+      <input type="text" id="adminUser" placeholder="Admin username" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label for="adminPass">Password</label>
+      <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div id="loginError" style="color:#c0392b;font-size:0.85rem;margin-bottom:1rem;display:none;">Invalid credentials. Please try again.</div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Sign In</button>
+    <p style="margin-top:1.5rem;font-size:0.75rem;color:var(--text-light);text-align:center;">This page is not linked publicly. For access issues contact caswastikjain11@gmail.com</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none;">
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-brand">
       <span class="brand-mark">⬡</span>
-      <span class="brand-text">Swastik Jain <em>&</em> Co.</span>
+      <span class="brand-text">Swastik Jain <em>&</em> Co. <span style="font-size:0.7rem;color:var(--gt-magenta);font-family:var(--font-sans);">Admin</span></span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="articles.html">Articles</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="admin.html" class="active" style="color:var(--teal)">Admin ⬡</a></li>
-    </ul>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="index.html" style="font-size:0.8rem;color:var(--text-muted);text-decoration:none;">View Site</a>
+      <button class="btn btn-outline" style="padding:0.4rem 1rem;font-size:0.78rem;" onclick="doLogout()">Sign Out</button>
+    </div>
   </div>
 </nav>
 
-<div style="padding-top:80px;">
-  <div class="admin-wrap">
+<div class="admin-dashboard container">
+  <h2 style="font-family:var(--font-serif);font-size:2rem;margin-bottom:0.5rem;color:var(--gt-purple);">Dashboard</h2>
+  <p style="color:var(--text-muted);margin-bottom:2.5rem;">Manage your blog articles and view resume submissions.</p>
 
-    <div class="admin-header">
-      <h1>Article Manager</h1>
-      <a href="articles.html" target="_blank">↗ View Public Articles</a>
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="switchTab('blogs',this)">📝 Blog Articles</button>
+    <button class="admin-tab" onclick="switchTab('resumes',this)">📄 Resume Submissions</button>
+  </div>
+
+  <!-- BLOG PANEL -->
+  <div class="admin-panel active" id="panel-blogs">
+    <div class="admin-section-head">
+      <h3 style="font-family:var(--font-serif);font-size:1.5rem;">Articles</h3>
+      <button class="btn btn-primary" style="font-size:0.82rem;padding:0.6rem 1.4rem;" onclick="toggleEditor(true)">+ New Article</button>
     </div>
 
-    <!-- Stats -->
-    <div class="admin-stats" id="adminStats"></div>
+    <table class="admin-table" id="blogTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="blogTableBody"></tbody>
+    </table>
 
-    <!-- Tabs -->
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="showTab('tabList')">Published Articles</button>
-      <button class="admin-tab" onclick="showTab('tabNew')" id="tabNewBtn">+ New Article</button>
-    </div>
-
-    <!-- LIST TAB -->
-    <div id="tabList" class="tab-pane active">
-      <div id="articleListContainer" class="article-list"></div>
-    </div>
-
-    <!-- NEW / EDIT TAB -->
-    <div id="tabNew" class="tab-pane">
-      <div class="admin-form">
-        <input type="hidden" id="editId">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Article Title *</label>
-            <input type="text" id="aTitle" placeholder="e.g. Understanding GST Input Tax Credit Rules">
-          </div>
-          <div class="form-group">
-            <label>Category *</label>
-            <select id="aCategory">
-              <option value="">— Select —</option>
-              <option>Income Tax</option>
-              <option>GST</option>
-              <option>Audit & Assurance</option>
-              <option>Accounting</option>
-              <option>Regulatory Updates</option>
-              <option>General</option>
-            </select>
-          </div>
-        </div>
+    <!-- Blog Editor -->
+    <div class="blog-editor" id="blogEditor" style="display:none;">
+      <h3 id="editorTitle">New Article</h3>
+      <input type="hidden" id="editId">
+      <div class="form-group">
+        <label>Article Title <span class="required">*</span></label>
+        <input type="text" id="blogTitle" placeholder="Enter article title…">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
         <div class="form-group">
-          <label>Summary / Excerpt *</label>
-          <input type="text" id="aSummary" placeholder="A brief one-line summary shown in listing pages">
-        </div>
-        <div class="form-group">
-          <label>Author</label>
-          <input type="text" id="aAuthor" value="CA Swastik Jain" placeholder="CA Swastik Jain">
-        </div>
-        <div class="form-group">
-          <label>Article Body *</label>
-          <div class="editor-toolbar">
-            <button class="tb-btn" title="Bold" onclick="fmt('bold')"><b>B</b></button>
-            <button class="tb-btn" title="Italic" onclick="fmt('italic')"><i>I</i></button>
-            <button class="tb-btn" title="Underline" onclick="fmt('underline')"><u>U</u></button>
-            <button class="tb-btn" onclick="fmt('insertOrderedList')">1. List</button>
-            <button class="tb-btn" onclick="fmt('insertUnorderedList')">• List</button>
-            <button class="tb-btn" onclick="insertHeading()">H2</button>
-            <button class="tb-btn" onclick="insertHeading3()">H3</button>
-            <button class="tb-btn" onclick="insertDivider()">— HR</button>
-            <button class="tb-btn" onclick="fmt('removeFormat')">Clear</button>
-          </div>
-          <div id="aBody" class="editor-area" contenteditable="true" spellcheck="true"></div>
+          <label>Category <span class="required">*</span></label>
+          <select id="blogCategory">
+            <option>GST</option>
+            <option>Income Tax</option>
+            <option>Audit & Assurance</option>
+            <option>Accounting</option>
+            <option>Business Finance</option>
+            <option>Compliance</option>
+            <option>General</option>
+          </select>
         </div>
         <div class="form-group">
           <label>Publication Date</label>
-          <input type="date" id="aDate">
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="aStatus">
-            <option value="published">Published</option>
-            <option value="draft">Draft</option>
-          </select>
-        </div>
-        <div class="admin-actions">
-          <button class="btn btn-primary" onclick="saveArticle()">Save Article</button>
-          <button class="btn btn-outline" onclick="clearForm()">Clear Form</button>
-          <button class="btn-danger" id="deleteBtn" onclick="deleteArticle()" style="display:none;">Delete Article</button>
+          <input type="date" id="blogDate">
         </div>
       </div>
+      <div class="form-group">
+        <label>Summary / Excerpt <span class="required">*</span></label>
+        <textarea id="blogSummary" rows="2" placeholder="Brief summary shown on article cards…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Article Body (HTML supported)</label>
+        <div class="editor-toolbar">
+          <button class="toolbar-btn" onclick="insertTag('<h2>','</h2>')"><b>H2</b></button>
+          <button class="toolbar-btn" onclick="insertTag('<h3>','</h3>')"><b>H3</b></button>
+          <button class="toolbar-btn" onclick="insertTag('<p>','</p>')">¶</button>
+          <button class="toolbar-btn" onclick="insertTag('<strong>','</strong>')"><b>B</b></button>
+          <button class="toolbar-btn" onclick="insertTag('<em>','</em>')"><i>I</i></button>
+          <button class="toolbar-btn" onclick="insertTag('<ul>\n  <li>','</li>\n</ul>')">• List</button>
+          <button class="toolbar-btn" onclick="insertTag('<hr>','')">—</button>
+        </div>
+        <textarea class="blog-content-editor" id="blogBody" placeholder="Write your article content here. HTML tags are supported…"></textarea>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem;">
+        <button class="btn btn-primary" onclick="saveArticle('published')">Publish Article</button>
+        <button class="btn btn-outline" onclick="saveArticle('draft')">Save as Draft</button>
+        <button class="btn" style="background:#eee;color:#555;" onclick="toggleEditor(false)">Cancel</button>
+      </div>
     </div>
-
   </div>
+
+  <!-- RESUMES PANEL -->
+  <div class="admin-panel" id="panel-resumes">
+    <div class="admin-section-head">
+      <h3 style="font-family:var(--font-serif);font-size:1.5rem;">Resume Submissions</h3>
+      <span style="font-size:0.82rem;color:var(--text-muted);">Submissions received via the Careers page</span>
+    </div>
+    <div style="background:var(--gt-purple-light);border:1px solid var(--border);padding:1.5rem;border-radius:3px;margin-bottom:2rem;">
+      <p style="font-size:0.88rem;color:var(--text-muted);"><strong style="color:var(--gt-purple);">📧 Email Integration:</strong> All resume submissions are sent directly to <strong>caswastikjain11@gmail.com</strong> via Formspree. To view them, check your email inbox. The table below shows locally tracked submissions for your reference.</p>
+    </div>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role Applied</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="resumeTableBody">
+        <tr><td colspan="5" style="text-align:center;padding:2.5rem;color:var(--text-muted);">Resume submissions will appear here once integrated with a backend. For now, all submissions are forwarded to your email.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 </div>
 
 <script src="app.js"></script>
 <script>
-// ── Admin CMS Logic ──
+// ── Auth ──────────────────────────────────────────
+// IMPORTANT: Change these credentials before deploying to production!
+// For production, use server-side authentication (see README for setup guide).
+const ADMIN_USER = 'swastikjain';
+const ADMIN_PASS = 'SJCAdmin@2025';  // CHANGE THIS
 
-function showTab(id) {
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+function doLogin() {
+  const u = document.getElementById('adminUser').value.trim();
+  const p = document.getElementById('adminPass').value;
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    sessionStorage.setItem('sjc_admin', '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadBlogTable();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('sjc_admin');
+  location.reload();
+}
+
+// Check if already logged in
+if (sessionStorage.getItem('sjc_admin') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  setTimeout(loadBlogTable, 50);
+}
+
+// Enter key on password
+document.addEventListener('DOMContentLoaded', () => {
+  const pass = document.getElementById('adminPass');
+  if (pass) pass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+});
+
+// ── Tab switching ─────────────────────────────────
+function switchTab(name, btn) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  const tabIndex = id === 'tabList' ? 0 : 1;
-  document.querySelectorAll('.admin-tab')[tabIndex].classList.add('active');
-  if (id === 'tabList') { renderList(); clearForm(); }
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
 }
 
-// Today date default
-document.getElementById('aDate').value = new Date().toISOString().split('T')[0];
-
-function fmt(cmd) {
-  document.execCommand(cmd, false, null);
-  document.getElementById('aBody').focus();
-}
-function insertHeading() {
-  document.execCommand('formatBlock', false, 'h2');
-  document.getElementById('aBody').focus();
-}
-function insertHeading3() {
-  document.execCommand('formatBlock', false, 'h3');
-  document.getElementById('aBody').focus();
-}
-function insertDivider() {
-  document.execCommand('insertHorizontalRule', false, null);
-  document.getElementById('aBody').focus();
-}
-
-function saveArticle() {
-  const title = document.getElementById('aTitle').value.trim();
-  const category = document.getElementById('aCategory').value;
-  const summary = document.getElementById('aSummary').value.trim();
-  const author = document.getElementById('aAuthor').value.trim() || 'CA Swastik Jain';
-  const body = document.getElementById('aBody').innerHTML.trim();
-  const date = document.getElementById('aDate').value;
-  const status = document.getElementById('aStatus').value;
-  const editId = document.getElementById('editId').value;
-
-  if (!title || !category || !summary || !body) {
-    alert('Please fill in Title, Category, Summary, and Article Body.');
+// ── Blog management ───────────────────────────────
+function loadBlogTable() {
+  const articles = getArticles();
+  const tbody = document.getElementById('blogTableBody');
+  if (!tbody) return;
+  if (articles.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">No articles yet. Click "+ New Article" to create one.</td></tr>';
     return;
   }
+  tbody.innerHTML = articles.map(a => `
+    <tr>
+      <td style="max-width:320px;"><strong>${a.title}</strong></td>
+      <td>${a.category}</td>
+      <td>${formatDate(a.date)}</td>
+      <td><span class="badge ${a.status === 'published' ? 'badge-published' : 'badge-draft'}">${a.status}</span></td>
+      <td>
+        <button class="admin-action-btn view" onclick="editArticle('${a.id}')">Edit</button>
+        <button class="admin-action-btn ${a.status === 'published' ? 'delete' : 'publish'}" onclick="togglePublish('${a.id}')">${a.status === 'published' ? 'Unpublish' : 'Publish'}</button>
+        <button class="admin-action-btn delete" onclick="deleteArticle('${a.id}')">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleEditor(show) {
+  const ed = document.getElementById('blogEditor');
+  ed.style.display = show ? 'block' : 'none';
+  if (show && !document.getElementById('editId').value) {
+    // New article - reset form
+    document.getElementById('editorTitle').textContent = 'New Article';
+    document.getElementById('editId').value = '';
+    document.getElementById('blogTitle').value = '';
+    document.getElementById('blogSummary').value = '';
+    document.getElementById('blogBody').value = '';
+    document.getElementById('blogDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('blogCategory').value = 'GST';
+  }
+  if (show) ed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function editArticle(id) {
+  const art = getArticles().find(a => a.id === id);
+  if (!art) return;
+  document.getElementById('editorTitle').textContent = 'Edit Article';
+  document.getElementById('editId').value = id;
+  document.getElementById('blogTitle').value = art.title;
+  document.getElementById('blogSummary').value = art.summary;
+  document.getElementById('blogBody').value = art.body;
+  document.getElementById('blogDate').value = art.date;
+  document.getElementById('blogCategory').value = art.category;
+  toggleEditor(true);
+}
+
+function saveArticle(status) {
+  const title = document.getElementById('blogTitle').value.trim();
+  const summary = document.getElementById('blogSummary').value.trim();
+  const body = document.getElementById('blogBody').value.trim();
+  if (!title || !summary || !body) { alert('Please fill in Title, Summary, and Body.'); return; }
 
   const articles = getArticles();
+  const editId = document.getElementById('editId').value;
+  const now = new Date().toISOString();
+
   if (editId) {
     const idx = articles.findIndex(a => a.id === editId);
     if (idx > -1) {
-      articles[idx] = { ...articles[idx], title, category, summary, author, body, date, status, updatedAt: new Date().toISOString() };
+      articles[idx] = { ...articles[idx],
+        title, summary, body, status,
+        category: document.getElementById('blogCategory').value,
+        date: document.getElementById('blogDate').value,
+      };
     }
   } else {
     articles.unshift({
       id: 'art_' + Date.now(),
-      title, category, summary, author, body, date,
-      status,
-      createdAt: new Date().toISOString()
+      title, summary, body, status,
+      category: document.getElementById('blogCategory').value,
+      date: document.getElementById('blogDate').value,
+      author: 'CA Swastik Jain',
+      createdAt: now,
     });
   }
   saveArticles(articles);
-  updateStats();
-  clearForm();
-  showTab('tabList');
-}
-
-function clearForm() {
+  toggleEditor(false);
   document.getElementById('editId').value = '';
-  document.getElementById('aTitle').value = '';
-  document.getElementById('aCategory').value = '';
-  document.getElementById('aSummary').value = '';
-  document.getElementById('aAuthor').value = 'CA Swastik Jain';
-  document.getElementById('aBody').innerHTML = '';
-  document.getElementById('aDate').value = new Date().toISOString().split('T')[0];
-  document.getElementById('aStatus').value = 'published';
-  document.getElementById('deleteBtn').style.display = 'none';
+  loadBlogTable();
+  alert(status === 'published' ? 'Article published successfully!' : 'Draft saved.');
 }
 
-function editArticle(id) {
-  const articles = getArticles();
-  const art = articles.find(a => a.id === id);
-  if (!art) return;
-  document.getElementById('editId').value = art.id;
-  document.getElementById('aTitle').value = art.title;
-  document.getElementById('aCategory').value = art.category;
-  document.getElementById('aSummary').value = art.summary;
-  document.getElementById('aAuthor').value = art.author;
-  document.getElementById('aBody').innerHTML = art.body;
-  document.getElementById('aDate').value = art.date;
-  document.getElementById('aStatus').value = art.status || 'published';
-  document.getElementById('deleteBtn').style.display = 'block';
-  showTab('tabNew');
-  window.scrollTo({ top: 200, behavior: 'smooth' });
-}
-
-function deleteArticle() {
-  const id = document.getElementById('editId').value;
-  if (!id) return;
+function deleteArticle(id) {
   if (!confirm('Delete this article? This cannot be undone.')) return;
-  const articles = getArticles().filter(a => a.id !== id);
-  saveArticles(articles);
-  updateStats();
-  clearForm();
-  showTab('tabList');
+  saveArticles(getArticles().filter(a => a.id !== id));
+  loadBlogTable();
 }
 
-function renderList() {
+function togglePublish(id) {
   const articles = getArticles();
-  const container = document.getElementById('articleListContainer');
-  if (articles.length === 0) {
-    container.innerHTML = '<div class="empty-state"><p>◻</p><p>No articles yet. Click "+ New Article" to create your first one.</p></div>';
-    return;
+  const idx = articles.findIndex(a => a.id === id);
+  if (idx > -1) {
+    articles[idx].status = articles[idx].status === 'published' ? 'draft' : 'published';
+    saveArticles(articles);
+    loadBlogTable();
   }
-  container.innerHTML = articles.map(art => `
-    <div class="article-list-item">
-      <div class="ali-info">
-        <h3>${art.title}${art.status === 'draft' ? ' <span style="font-size:0.7rem;background:#f39c12;color:#fff;padding:0.15rem 0.5rem;border-radius:100px;vertical-align:middle;">Draft</span>' : ''}</h3>
-        <div class="ali-meta">
-          ${formatDate(art.date)} · ${art.author}
-          <span class="ali-cat">${art.category}</span>
-        </div>
-        <div class="content-preview">${art.summary}</div>
-      </div>
-      <div class="ali-actions">
-        <button class="btn-sm" onclick="editArticle('${art.id}')">Edit</button>
-        <a href="article.html?id=${art.id}" target="_blank" class="btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">View ↗</a>
-      </div>
-    </div>
-  `).join('');
 }
 
-function updateStats() {
-  const articles = getArticles();
-  const published = articles.filter(a => a.status !== 'draft').length;
-  const drafts = articles.filter(a => a.status === 'draft').length;
-  const cats = [...new Set(articles.map(a => a.category))].length;
-  document.getElementById('adminStats').innerHTML = `
-    <div class="stat-card"><div class="stat-num">${published}</div><div class="stat-label">Published</div></div>
-    <div class="stat-card"><div class="stat-num">${drafts}</div><div class="stat-label">Drafts</div></div>
-    <div class="stat-card"><div class="stat-num">${cats}</div><div class="stat-label">Categories</div></div>
-  `;
+// ── Toolbar helpers ───────────────────────────────
+function insertTag(open, close) {
+  const ta = document.getElementById('blogBody');
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  const selected = ta.value.substring(start, end);
+  ta.value = ta.value.substring(0, start) + open + selected + close + ta.value.substring(end);
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = start + open.length + selected.length + close.length;
 }
-
-// Init
-renderList();
-updateStats();
 </script>
 </body>
 </html>
