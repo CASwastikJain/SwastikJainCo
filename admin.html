@@ -11,7 +11,6 @@
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
 <div class="admin-wrap" id="loginScreen">
   <div class="admin-login-card">
     <h1>Admin Portal</h1>
@@ -25,12 +24,11 @@
       <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
     </div>
     <div id="loginError" style="color:#c0392b;font-size:0.85rem;margin-bottom:1rem;display:none;">Invalid credentials. Please try again.</div>
-    <button class="btn btn-primary btn-full" onclick="doLogin()">Sign In</button>
+    <button class="btn btn-primary btn-full" onclick="window.doLogin()">Sign In</button>
     <p style="margin-top:1.5rem;font-size:0.75rem;color:var(--text-light);text-align:center;">This page is not linked publicly. For access issues contact caswastikjain11@gmail.com</p>
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" style="display:none;">
 <nav class="nav" id="nav">
   <div class="nav-inner">
@@ -40,7 +38,7 @@
     </a>
     <div style="display:flex;align-items:center;gap:1rem;">
       <a href="index.html" style="font-size:0.8rem;color:var(--text-muted);text-decoration:none;">View Site</a>
-      <button class="btn btn-outline" style="padding:0.4rem 1rem;font-size:0.78rem;" onclick="doLogout()">Sign Out</button>
+      <button class="btn btn-outline" style="padding:0.4rem 1rem;font-size:0.78rem;" onclick="window.doLogout()">Sign Out</button>
     </div>
   </div>
 </nav>
@@ -50,15 +48,14 @@
   <p style="color:var(--text-muted);margin-bottom:2.5rem;">Manage your blog articles and view resume submissions.</p>
 
   <div class="admin-tabs">
-    <button class="admin-tab active" onclick="switchTab('blogs',this)">📝 Blog Articles</button>
-    <button class="admin-tab" onclick="switchTab('resumes',this)">📄 Resume Submissions</button>
+    <button class="admin-tab active" onclick="window.switchTab('blogs',this)">📝 Blog Articles</button>
+    <button class="admin-tab" onclick="window.switchTab('resumes',this)">📄 Resume Submissions</button>
   </div>
 
-  <!-- BLOG PANEL -->
   <div class="admin-panel active" id="panel-blogs">
     <div class="admin-section-head">
       <h3 style="font-family:var(--font-serif);font-size:1.5rem;">Articles</h3>
-      <button class="btn btn-primary" style="font-size:0.82rem;padding:0.6rem 1.4rem;" onclick="toggleEditor(true)">+ New Article</button>
+      <button class="btn btn-primary" style="font-size:0.82rem;padding:0.6rem 1.4rem;" onclick="window.toggleEditor(true)">+ New Article</button>
     </div>
 
     <table class="admin-table" id="blogTable">
@@ -74,7 +71,6 @@
       <tbody id="blogTableBody"></tbody>
     </table>
 
-    <!-- Blog Editor -->
     <div class="blog-editor" id="blogEditor" style="display:none;">
       <h3 id="editorTitle">New Article</h3>
       <input type="hidden" id="editId">
@@ -107,25 +103,24 @@
       <div class="form-group">
         <label>Article Body (HTML supported)</label>
         <div class="editor-toolbar">
-          <button class="toolbar-btn" onclick="insertTag('<h2>','</h2>')"><b>H2</b></button>
-          <button class="toolbar-btn" onclick="insertTag('<h3>','</h3>')"><b>H3</b></button>
-          <button class="toolbar-btn" onclick="insertTag('<p>','</p>')">¶</button>
-          <button class="toolbar-btn" onclick="insertTag('<strong>','</strong>')"><b>B</b></button>
-          <button class="toolbar-btn" onclick="insertTag('<em>','</em>')"><i>I</i></button>
-          <button class="toolbar-btn" onclick="insertTag('<ul>\n  <li>','</li>\n</ul>')">• List</button>
-          <button class="toolbar-btn" onclick="insertTag('<hr>','')">—</button>
+          <button class="toolbar-btn" onclick="window.insertTag('<h2>','</h2>')"><b>H2</b></button>
+          <button class="toolbar-btn" onclick="window.insertTag('<h3>','</h3>')"><b>H3</b></button>
+          <button class="toolbar-btn" onclick="window.insertTag('<p>','</p>')">¶</button>
+          <button class="toolbar-btn" onclick="window.insertTag('<strong>','</strong>')"><b>B</b></button>
+          <button class="toolbar-btn" onclick="window.insertTag('<em>','</em>')"><i>I</i></button>
+          <button class="toolbar-btn" onclick="window.insertTag('<ul>\n  <li>','</li>\n</ul>')">• List</button>
+          <button class="toolbar-btn" onclick="window.insertTag('<hr>','')">—</button>
         </div>
         <textarea class="blog-content-editor" id="blogBody" placeholder="Write your article content here. HTML tags are supported…"></textarea>
       </div>
       <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem;">
-        <button class="btn btn-primary" onclick="saveArticle('published')">Publish Article</button>
-        <button class="btn btn-outline" onclick="saveArticle('draft')">Save as Draft</button>
-        <button class="btn" style="background:#eee;color:#555;" onclick="toggleEditor(false)">Cancel</button>
+        <button class="btn btn-primary" onclick="window.saveArticle('published')">Publish Article</button>
+        <button class="btn btn-outline" onclick="window.saveArticle('draft')">Save as Draft</button>
+        <button class="btn" style="background:#eee;color:#555;" onclick="window.toggleEditor(false)">Cancel</button>
       </div>
     </div>
   </div>
 
-  <!-- RESUMES PANEL -->
   <div class="admin-panel" id="panel-resumes">
     <div class="admin-section-head">
       <h3 style="font-family:var(--font-serif);font-size:1.5rem;">Resume Submissions</h3>
@@ -152,56 +147,53 @@
 </div>
 </div>
 
-<script src="app.js"></script>
-<script>
-// ── Auth ──────────────────────────────────────────
-// IMPORTANT: Change these credentials before deploying to production!
-// For production, use server-side authentication (see README for setup guide).
-const ADMIN_USER = 'swastikjain';
-const ADMIN_PASS = 'SJCAdmin@2025';  // CHANGE THIS
+<script type="module">
+import "./app.js";
 
-function doLogin() {
+// ── Auth ──────────────────────────────────────────
+const ADMIN_USER = 'swastikjain';
+const ADMIN_PASS = 'SJCAdmin@2025'; 
+
+window.doLogin = function() {
   const u = document.getElementById('adminUser').value.trim();
   const p = document.getElementById('adminPass').value;
   if (u === ADMIN_USER && p === ADMIN_PASS) {
     sessionStorage.setItem('sjc_admin', '1');
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    loadBlogTable();
+    window.loadBlogTable();
   } else {
     document.getElementById('loginError').style.display = 'block';
   }
 }
 
-function doLogout() {
+window.doLogout = function() {
   sessionStorage.removeItem('sjc_admin');
   location.reload();
 }
 
-// Check if already logged in
 if (sessionStorage.getItem('sjc_admin') === '1') {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
-  setTimeout(loadBlogTable, 50);
+  setTimeout(() => window.loadBlogTable(), 500);
 }
 
-// Enter key on password
 document.addEventListener('DOMContentLoaded', () => {
   const pass = document.getElementById('adminPass');
-  if (pass) pass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  if (pass) pass.addEventListener('keydown', e => { if (e.key === 'Enter') window.doLogin(); });
 });
 
 // ── Tab switching ─────────────────────────────────
-function switchTab(name, btn) {
+window.switchTab = function(name, btn) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('panel-' + name).classList.add('active');
 }
 
-// ── Blog management ───────────────────────────────
-function loadBlogTable() {
-  const articles = getArticles();
+// ── Blog management (Firebase) ────────────────────
+window.loadBlogTable = async function() {
+  const articles = await window.getArticlesDB();
   const tbody = document.getElementById('blogTableBody');
   if (!tbody) return;
   if (articles.length === 0) {
@@ -212,22 +204,21 @@ function loadBlogTable() {
     <tr>
       <td style="max-width:320px;"><strong>${a.title}</strong></td>
       <td>${a.category}</td>
-      <td>${formatDate(a.date)}</td>
+      <td>${window.formatDate(a.date)}</td>
       <td><span class="badge ${a.status === 'published' ? 'badge-published' : 'badge-draft'}">${a.status}</span></td>
       <td>
-        <button class="admin-action-btn view" onclick="editArticle('${a.id}')">Edit</button>
-        <button class="admin-action-btn ${a.status === 'published' ? 'delete' : 'publish'}" onclick="togglePublish('${a.id}')">${a.status === 'published' ? 'Unpublish' : 'Publish'}</button>
-        <button class="admin-action-btn delete" onclick="deleteArticle('${a.id}')">Delete</button>
+        <button class="admin-action-btn view" onclick="window.editArticle('${a.id}')">Edit</button>
+        <button class="admin-action-btn ${a.status === 'published' ? 'delete' : 'publish'}" onclick="window.togglePublish('${a.id}')">${a.status === 'published' ? 'Unpublish' : 'Publish'}</button>
+        <button class="admin-action-btn delete" onclick="window.deleteArticle('${a.id}')">Delete</button>
       </td>
     </tr>
   `).join('');
 }
 
-function toggleEditor(show) {
+window.toggleEditor = function(show) {
   const ed = document.getElementById('blogEditor');
   ed.style.display = show ? 'block' : 'none';
   if (show && !document.getElementById('editId').value) {
-    // New article - reset form
     document.getElementById('editorTitle').textContent = 'New Article';
     document.getElementById('editId').value = '';
     document.getElementById('blogTitle').value = '';
@@ -239,8 +230,9 @@ function toggleEditor(show) {
   if (show) ed.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function editArticle(id) {
-  const art = getArticles().find(a => a.id === id);
+window.editArticle = async function(id) {
+  const articles = await window.getArticlesDB();
+  const art = articles.find(a => a.id === id);
   if (!art) return;
   document.getElementById('editorTitle').textContent = 'Edit Article';
   document.getElementById('editId').value = id;
@@ -249,63 +241,60 @@ function editArticle(id) {
   document.getElementById('blogBody').value = art.body;
   document.getElementById('blogDate').value = art.date;
   document.getElementById('blogCategory').value = art.category;
-  toggleEditor(true);
+  window.toggleEditor(true);
 }
 
-function saveArticle(status) {
+window.saveArticle = async function(status) {
   const title = document.getElementById('blogTitle').value.trim();
   const summary = document.getElementById('blogSummary').value.trim();
   const body = document.getElementById('blogBody').value.trim();
   if (!title || !summary || !body) { alert('Please fill in Title, Summary, and Body.'); return; }
 
-  const articles = getArticles();
   const editId = document.getElementById('editId').value;
   const now = new Date().toISOString();
 
+  // Determine original creation date if editing
+  let createdAt = now;
   if (editId) {
-    const idx = articles.findIndex(a => a.id === editId);
-    if (idx > -1) {
-      articles[idx] = { ...articles[idx],
-        title, summary, body, status,
-        category: document.getElementById('blogCategory').value,
-        date: document.getElementById('blogDate').value,
-      };
-    }
-  } else {
-    articles.unshift({
-      id: 'art_' + Date.now(),
-      title, summary, body, status,
-      category: document.getElementById('blogCategory').value,
-      date: document.getElementById('blogDate').value,
-      author: 'CA Swastik Jain',
-      createdAt: now,
-    });
+    const articles = await window.getArticlesDB();
+    const existing = articles.find(a => a.id === editId);
+    if (existing) createdAt = existing.createdAt;
   }
-  saveArticles(articles);
-  toggleEditor(false);
+
+  const newArticle = {
+    id: editId || 'art_' + Date.now(),
+    title, summary, body, status,
+    category: document.getElementById('blogCategory').value,
+    date: document.getElementById('blogDate').value,
+    author: 'CA Swastik Jain',
+    createdAt: createdAt,
+  };
+
+  await window.saveArticleDB(newArticle);
+  window.toggleEditor(false);
   document.getElementById('editId').value = '';
-  loadBlogTable();
+  window.loadBlogTable();
   alert(status === 'published' ? 'Article published successfully!' : 'Draft saved.');
 }
 
-function deleteArticle(id) {
+window.deleteArticle = async function(id) {
   if (!confirm('Delete this article? This cannot be undone.')) return;
-  saveArticles(getArticles().filter(a => a.id !== id));
-  loadBlogTable();
+  await window.deleteArticleDB(id);
+  window.loadBlogTable();
 }
 
-function togglePublish(id) {
-  const articles = getArticles();
-  const idx = articles.findIndex(a => a.id === id);
-  if (idx > -1) {
-    articles[idx].status = articles[idx].status === 'published' ? 'draft' : 'published';
-    saveArticles(articles);
-    loadBlogTable();
+window.togglePublish = async function(id) {
+  const articles = await window.getArticlesDB();
+  const art = articles.find(a => a.id === id);
+  if (art) {
+    art.status = art.status === 'published' ? 'draft' : 'published';
+    await window.saveArticleDB(art);
+    window.loadBlogTable();
   }
 }
 
 // ── Toolbar helpers ───────────────────────────────
-function insertTag(open, close) {
+window.insertTag = function(open, close) {
   const ta = document.getElementById('blogBody');
   const start = ta.selectionStart;
   const end = ta.selectionEnd;

@@ -23,6 +23,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="services.html">Services</a></li>
+      <li><a href="careers.html">Careers</a></li>
       <li><a href="articles.html" class="active">Articles</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
@@ -41,7 +42,7 @@
       <div class="footer-brand">
         <span class="brand-mark"></span>
         <strong>Swastik Jain & Co.</strong>
-        <p>Chartered Accountants<br>Indore, Madhya Pradesh</p>
+        <p>Chartered Accountants<br>51A, Sainath Colony<br>Indore – 452001, MP</p>
       </div>
       <div class="footer-nav">
         <strong>Navigation</strong>
@@ -50,13 +51,13 @@
           <li><a href="about.html">About</a></li>
           <li><a href="services.html">Services</a></li>
           <li><a href="careers.html">Careers</a></li>
-      <li><a href="articles.html">Articles</a></li>
+          <li><a href="articles.html">Articles</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
       <div class="footer-contact">
         <strong>Contact</strong>
-        <p>Email: caswastikjain11@gmail.com<br>Phone: +91 79996 64769<br>Indore, MP – 452001</p>
+        <p>Email: caswastikjain11@gmail.com<br>Phone: +91 79996 64769<br>51A, Sainath Colony<br>Indore – 452001, MP</p>
       </div>
     </div>
     <div class="footer-disclaimer">
@@ -68,7 +69,11 @@
   </div>
 </footer>
 
-<script src="app.js"></script>
-<script>renderSingleArticle();</script>
+<script type="module">
+  import "./app.js";
+  setTimeout(async () => {
+    await window.renderSingleArticle();
+  }, 500);
+</script>
 </body>
 </html>

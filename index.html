@@ -31,7 +31,6 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
@@ -50,7 +49,6 @@
   </div>
 </section>
 
-<!-- SERVICES OVERVIEW -->
 <section class="section services-overview">
   <div class="container">
     <div class="section-label">Professional Services</div>
@@ -99,7 +97,6 @@
   </div>
 </section>
 
-<!-- SERVICE MODALS -->
 <div class="service-modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="service-modal" id="serviceModal">
     <button class="modal-close" onclick="closeModalBtn()">✕</button>
@@ -107,7 +104,6 @@
   </div>
 </div>
 
-<!-- USEFUL WEBSITES -->
 <section class="useful-links-section">
   <div class="container">
     <div class="section-label">Quick Access</div>
@@ -148,7 +144,6 @@
   </div>
 </section>
 
-<!-- ARTICLES PREVIEW -->
 <section class="section articles-preview">
   <div class="container">
     <div class="section-label">Knowledge & Updates</div>
@@ -162,7 +157,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -199,10 +193,7 @@
   </div>
 </footer>
 
-<script src="app.js"></script>
 <script>
-renderHomeArticles();
-
 const SERVICE_DATA = {
   'income-tax': {
     tag: 'Direct Taxation',
@@ -342,6 +333,13 @@ function closeModal(e) {
   if (e.target === document.getElementById('modalOverlay')) closeModalBtn();
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
+</script>
+
+<script type="module">
+  import "./app.js";
+  setTimeout(async () => {
+    await window.renderHomeArticles();
+  }, 500);
 </script>
 </body>
 </html>
