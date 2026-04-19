@@ -9,11 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 
-<!-- EmailJS -->
+<!-- EmailJS (non-module, loaded normally) -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("w2mYX4Ei8igosWGh4");</script>
 
 <style>
-/* ── Acknowledgment overlay ─────────────────────────── */
+/* ── Acknowledgment overlay ──────────────────────────── */
 .ack-overlay {
   display: none;
   position: fixed;
@@ -26,7 +27,6 @@
   justify-content: center;
 }
 .ack-overlay.visible { display: flex; }
-
 .ack-card {
   background: #fff;
   border-radius: 20px;
@@ -34,7 +34,7 @@
   max-width: 420px;
   width: 90%;
   text-align: center;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.28);
   animation: ackPop 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
 }
 @keyframes ackPop {
@@ -47,23 +47,20 @@
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 1.5rem;
-  animation: iconScale 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  animation: iconPop 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
 }
-@keyframes iconScale {
+@keyframes iconPop {
   from { transform:scale(0); }
   to   { transform:scale(1); }
 }
 .ack-icon svg { width:36px; height:36px; }
-
 .ack-card h2 {
   font-family:'Cormorant Garamond',serif;
-  font-size:1.85rem; font-weight:600; color:#1a1a1a;
-  margin:0 0 0.6rem;
+  font-size:1.85rem; font-weight:600; color:#1a1a1a; margin:0 0 0.6rem;
 }
 .ack-card p {
   font-family:'DM Sans',sans-serif;
-  font-size:0.92rem; color:#555; line-height:1.65;
-  margin:0 0 0.4rem;
+  font-size:0.92rem; color:#555; line-height:1.65; margin:0 0 0.4rem;
 }
 .ack-ref {
   display:inline-block; margin:1rem 0 1.5rem;
@@ -82,22 +79,23 @@
   cursor:pointer; border:none;
   transition:opacity 0.2s, transform 0.2s;
 }
-.ack-close:hover { opacity:0.88; transform:translateY(-1px); }
+.ack-close:hover { opacity:0.85; transform:translateY(-1px); }
 
-/* ── Upload progress ─────────────────────────────────── */
+/* ── Upload progress bar ─────────────────────────────── */
 .upload-progress-wrap { display:none; margin-top:0.6rem; }
 .upload-progress-wrap.visible { display:block; }
 .upload-progress-track {
-  height:5px; background:#e8e3d8; border-radius:99px; overflow:hidden;
+  height:5px; background:#e8e3d8;
+  border-radius:99px; overflow:hidden;
 }
 .upload-progress-fill {
   height:100%; width:0%;
   background:linear-gradient(90deg,#1a3a2e,#2d6a4f);
-  border-radius:99px; transition:width 0.25s ease;
+  border-radius:99px; transition:width 0.2s ease;
 }
 .upload-progress-label {
   font-size:0.78rem; color:#666;
-  font-family:'DM Sans',sans-serif; margin-top:0.3rem;
+  font-family:'DM Sans',sans-serif; margin-top:0.35rem;
 }
 
 /* ── Error banner ────────────────────────────────────── */
@@ -110,6 +108,7 @@
 .form-error-banner.visible { display:block; }
 .form-error-banner a { color:#b00; }
 
+/* ── File size warning ───────────────────────────────── */
 #fileSizeError {
   display:none; color:#c00; font-size:0.82rem;
   margin-top:0.3rem; font-family:'DM Sans',sans-serif;
@@ -119,21 +118,22 @@
 <body>
 
 <!-- ── Acknowledgment Overlay ─────────────────────────── -->
-<div class="ack-overlay" id="ackOverlay" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
+<div class="ack-overlay" id="ackOverlay" role="dialog" aria-modal="true">
   <div class="ack-card">
     <div class="ack-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"/>
       </svg>
     </div>
-    <h2 id="ackTitle">Application Received!</h2>
+    <h2>Application Received!</h2>
     <p>Thank you for your interest in joining <strong>Swastik Jain &amp; Co.</strong></p>
-    <p>We have received your resume and will review it carefully. You can expect to hear from us if there is a suitable opportunity.</p>
+    <p>We have received your resume and will be in touch if there's a suitable opportunity.</p>
     <div class="ack-ref">Reference ID: <strong id="ackRef">—</strong></div>
     <p style="font-size:0.8rem;color:#888;margin-bottom:1.5rem;">
       Confirmation sent to <strong id="ackEmail">your email</strong>.
     </p>
-    <button class="ack-close" onclick="closeAck()">Done</button>
+    <button class="ack-close" id="ackClose">Done</button>
   </div>
 </div>
 
@@ -197,13 +197,13 @@
         <div class="career-tag">Open Application</div>
         <h3>General Application</h3>
         <div class="career-meta">📍 Indore &nbsp;|&nbsp; Various Roles</div>
-        <p>Don't see the exact role you're looking for? We encourage open applications from qualified professionals. Submit your resume and we'll reach out when a suitable opportunity arises.</p>
+        <p>Don't see the exact role you're looking for? We encourage open applications. Submit your resume and we'll reach out when a suitable opportunity arises.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── Resume Upload ───────────────────────────────────── -->
+<!-- ── Resume Form ────────────────────────────────────── -->
 <section class="resume-section" id="apply">
   <div class="container">
     <div class="resume-box">
@@ -262,7 +262,7 @@
   </div>
 </section>
 
-<!-- ── Footer ──────────────────────────────────────────── -->
+<!-- ── Footer ────────────────────────────────────────── -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -296,77 +296,69 @@
   </div>
 </footer>
 
-<!-- Firebase v10 compat -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<!--
+  app.js already calls initializeApp() with the same config.
+  We import Storage & Firestore from the SAME modular SDK here
+  so there is only ONE Firebase app instance — no conflict, no hang.
+-->
+<script type="module">
+import { getApp }                               from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, serverTimestamp }
+                                                from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL }
+                                                from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
 
-<script>
-/* ═══════════════════════════════════════════════════════
-   INIT FIREBASE
-═══════════════════════════════════════════════════════ */
-firebase.initializeApp({
-  apiKey:            "AIzaSyAF9UoInEijb1bshvtvwNW1HX32xKNqI2k",
-  authDomain:        "website-6bcb7.firebaseapp.com",
-  projectId:         "website-6bcb7",
-  storageBucket:     "website-6bcb7.firebasestorage.app",
-  messagingSenderId: "896028257600",
-  appId:             "1:896028257600:web:0ae43b78b9b136a032dea5",
-  measurementId:     "G-0ZK3YP8GTL"
-});
-const db      = firebase.firestore();
-const storage = firebase.storage();
+/* ── Grab the app already created by app.js ── */
+const app     = getApp();          // reuses the existing instance
+const db      = getFirestore(app);
+const storage = getStorage(app);
 
-/* ═══════════════════════════════════════════════════════
-   INIT EMAILJS
-═══════════════════════════════════════════════════════ */
-emailjs.init("w2mYX4Ei8igosWGh4");
-
-/* ═══════════════════════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════════════════════ */
+/* ── Helpers ─────────────────────────────────────────── */
 function genRefId() {
   return 'SJC-' + Date.now().toString(36).toUpperCase() +
          '-' + Math.random().toString(36).slice(2,6).toUpperCase();
 }
+
 function setProgress(pct) {
   document.getElementById('uploadProgressFill').style.width = pct + '%';
   document.getElementById('uploadProgressLabel').textContent =
     pct < 100 ? `Uploading… ${Math.round(pct)}%` : 'Upload complete ✓';
 }
+
 function showError(msg) {
   const b = document.getElementById('errorBanner');
-  b.innerHTML = msg + ' &nbsp;|&nbsp; Email us directly: <a href="mailto:caswastikjain11@gmail.com">caswastikjain11@gmail.com</a>';
+  b.innerHTML = `${msg} &nbsp;·&nbsp; Email us: <a href="mailto:caswastikjain11@gmail.com">caswastikjain11@gmail.com</a>`;
   b.classList.add('visible');
-  b.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-function closeAck() {
-  document.getElementById('ackOverlay').classList.remove('visible');
+  b.scrollIntoView({ behavior:'smooth', block:'center' });
 }
 
-/* ═══════════════════════════════════════════════════════
-   FILE SIZE CHECK
-═══════════════════════════════════════════════════════ */
+/* ── Acknowledgment overlay close ────────────────────── */
+const ackOverlay = document.getElementById('ackOverlay');
+document.getElementById('ackClose').addEventListener('click', () =>
+  ackOverlay.classList.remove('visible')
+);
+ackOverlay.addEventListener('click', e => {
+  if (e.target === ackOverlay) ackOverlay.classList.remove('visible');
+});
+
+/* ── File size validation ────────────────────────────── */
 document.getElementById('r_resume').addEventListener('change', function () {
-  const errEl = document.getElementById('fileSizeError');
+  const err = document.getElementById('fileSizeError');
   if (this.files[0] && this.files[0].size > 5 * 1024 * 1024) {
-    errEl.style.display = 'block';
+    err.style.display = 'block';
     this.value = '';
   } else {
-    errEl.style.display = 'none';
+    err.style.display = 'none';
   }
 });
 
-/* ═══════════════════════════════════════════════════════
-   FORM SUBMIT
-═══════════════════════════════════════════════════════ */
+/* ── Form submit ─────────────────────────────────────── */
 document.getElementById('resumeForm').addEventListener('submit', async function (e) {
   e.preventDefault();
-
   document.getElementById('errorBanner').classList.remove('visible');
 
-  const btn   = document.getElementById('resumeSubmitBtn');
-  const file  = document.getElementById('r_resume').files[0];
+  const btn  = document.getElementById('resumeSubmitBtn');
+  const file = document.getElementById('r_resume').files[0];
   if (!file) { alert('Please select a resume file.'); return; }
 
   const name    = document.getElementById('r_name').value.trim();
@@ -384,10 +376,11 @@ document.getElementById('resumeForm').addEventListener('submit', async function 
   setProgress(0);
 
   try {
-    /* ── STEP 1: Upload to Firebase Storage ── */
-    const safeName   = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const storePath  = `resumes/${refId}_${safeName}`;
-    const uploadTask = storage.ref(storePath).put(file);
+    /* STEP 1 — Upload file to Firebase Storage */
+    const safeName  = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const storePath = `resumes/${refId}_${safeName}`;
+    const storageRef = ref(storage, storePath);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
     await new Promise((resolve, reject) => {
       uploadTask.on('state_changed',
@@ -398,45 +391,41 @@ document.getElementById('resumeForm').addEventListener('submit', async function 
     });
 
     setProgress(100);
-    const downloadURL = await storage.ref(storePath).getDownloadURL();
+    const downloadURL = await getDownloadURL(storageRef);
 
-    /* ── STEP 2: Save to Firestore ── */
-    btn.textContent = 'Saving application…';
-    await db.collection('resume_submissions').doc(refId).set({
+    /* STEP 2 — Save metadata to Firestore */
+    btn.textContent = 'Saving details…';
+    await setDoc(doc(collection(db, 'resume_submissions'), refId), {
       refId,
       name, email, phone, role, message,
       fileName:    file.name,
       fileSize:    file.size,
       storePath,
       downloadURL,
-      submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      submittedAt: serverTimestamp(),
       status:      'new'
     });
 
-    /* ── STEP 3: Send EmailJS notification ── */
+    /* STEP 3 — EmailJS notification */
     btn.textContent = 'Sending notification…';
     await emailjs.send('service_2uzm9pk', 'template_x4hr4b9', {
       ref_id:       refId,
-      name,
-      email,
-      phone,
-      role,
-      message,
+      name, email, phone, role, message,
       file_name:    file.name,
       download_url: downloadURL,
-      submitted_at: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+      submitted_at: new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata' })
     });
 
-    /* ── STEP 4: Show acknowledgment ── */
+    /* STEP 4 — Show acknowledgment */
     document.getElementById('ackRef').textContent   = refId;
     document.getElementById('ackEmail').textContent = email;
-    document.getElementById('ackOverlay').classList.add('visible');
+    ackOverlay.classList.add('visible');
 
     this.reset();
     progressWrap.classList.remove('visible');
 
   } catch (err) {
-    console.error(err);
+    console.error('Submission error:', err);
     showError('Submission failed: ' + (err.message || 'Unknown error.'));
     progressWrap.classList.remove('visible');
   } finally {
@@ -444,11 +433,10 @@ document.getElementById('resumeForm').addEventListener('submit', async function 
     btn.disabled    = false;
   }
 });
-
-/* Close overlay on backdrop click */
-document.getElementById('ackOverlay').addEventListener('click', function (e) {
-  if (e.target === this) closeAck();
-});
 </script>
+
+<!-- app.js must load AFTER the module above so getApp() finds the instance -->
+<script type="module" src="app.js"></script>
+
 </body>
 </html>
