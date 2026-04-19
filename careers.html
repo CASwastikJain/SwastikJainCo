@@ -8,6 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // Replace with your actual EmailJS Public Key
+  emailjs.init("YOUR_PUBLIC_KEY");
+</script>
 </head>
 <body>
 
@@ -81,13 +88,18 @@
     <div class="resume-box">
       <h2>Submit Your Resume</h2>
       <p>Upload your CV/resume (PDF format preferred, max 5 MB) along with a brief note about the role you're interested in. We will review your application and get in touch.</p>
+
       <div id="resumeSuccess" class="form-success" style="display:none;">
         <div class="success-icon">✓</div>
         <h3>Application Received</h3>
         <p>Thank you for your interest. We will review your resume and reach out if there is a suitable opportunity.</p>
       </div>
-      <form id="resumeForm" action="https://formspree.io/f/xjgjbeqy" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="_subject" value="New Resume Submission – Swastik Jain & Co.">
+
+      <div id="resumeError" class="form-error" style="display:none;">
+        <p>There was an issue sending your application. Please email your resume directly to <a href="mailto:caswastikjain11@gmail.com">caswastikjain11@gmail.com</a></p>
+      </div>
+
+      <form id="resumeForm">
         <div class="form-group">
           <label for="r_name">Full Name <span class="required">*</span></label>
           <input type="text" id="r_name" name="name" required placeholder="Your full name">
@@ -106,7 +118,7 @@
             <option value="">— Select —</option>
             <option>CA Article Assistant</option>
             <option>Accounts Executive</option>
-            <option>Tax & Compliance Associate</option>
+            <option>Tax &amp; Compliance Associate</option>
             <option>General Application</option>
           </select>
         </div>
@@ -119,6 +131,7 @@
             <small style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);">PDF, DOC, or DOCX — Max 5 MB</small>
           </label>
           <input type="file" id="r_resume" name="resume" accept=".pdf,.doc,.docx" required>
+          <div id="fileSizeError" style="color:red;font-size:0.85rem;margin-top:0.3rem;display:none;">File exceeds 5 MB limit. Please upload a smaller file.</div>
         </div>
         <div class="form-note">
           By submitting this form you consent to Swastik Jain & Co. storing your information for recruitment purposes. Your data will not be shared with third parties.
@@ -164,32 +177,73 @@
 
 <script src="app.js"></script>
 <script>
-const resumeForm = document.getElementById('resumeForm');
-resumeForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const btn = document.getElementById('resumeSubmitBtn');
-  btn.textContent = 'Submitting…';
-  btn.disabled = true;
-  try {
-    const res = await fetch(resumeForm.action, {
-      method: 'POST',
-      body: new FormData(resumeForm),
-      headers: { 'Accept': 'application/json' }
-    });
-    if (res.ok) {
+  const resumeForm = document.getElementById('resumeForm');
+  const submitBtn  = document.getElementById('resumeSubmitBtn');
+  const fileInput  = document.getElementById('r_resume');
+  const fileSizeError = document.getElementById('fileSizeError');
+
+  // Validate file size on selection
+  fileInput.addEventListener('change', () => {
+    const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
+    if (fileInput.files[0] && fileInput.files[0].size > MAX_BYTES) {
+      fileSizeError.style.display = 'block';
+      fileInput.value = '';
+    } else {
+      fileSizeError.style.display = 'none';
+    }
+  });
+
+  resumeForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const file = fileInput.files[0];
+    if (!file) {
+      alert('Please select a resume file before submitting.');
+      return;
+    }
+
+    submitBtn.textContent = 'Submitting…';
+    submitBtn.disabled = true;
+
+    try {
+      // Read the file as base64
+      const base64Data = await readFileAsBase64(file);
+
+      const templateParams = {
+        name:        document.getElementById('r_name').value.trim(),
+        email:       document.getElementById('r_email').value.trim(),
+        phone:       document.getElementById('r_phone').value.trim() || 'Not provided',
+        role:        document.getElementById('r_role').value,
+        message:     document.getElementById('r_message').value.trim() || 'No message provided.',
+        resume_name: file.name,
+        resume_data: base64Data   // base64 string — use in template if your plan supports attachments
+      };
+
+      // Replace 'YOUR_TEMPLATE_ID' with your actual EmailJS template ID
+      await emailjs.send('service_2uzm9pk', 'YOUR_TEMPLATE_ID', templateParams);
+
       resumeForm.style.display = 'none';
       document.getElementById('resumeSuccess').style.display = 'block';
-    } else {
-      btn.textContent = 'Submit Application';
-      btn.disabled = false;
-      alert('There was an issue. Please email your resume directly to caswastikjain11@gmail.com');
+
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      document.getElementById('resumeError').style.display = 'block';
+      submitBtn.textContent = 'Submit Application';
+      submitBtn.disabled = false;
     }
-  } catch {
-    btn.textContent = 'Submit Application';
-    btn.disabled = false;
-    alert('Network error. Please email your resume directly to caswastikjain11@gmail.com');
+  });
+
+  /**
+   * Reads a File object and returns its content as a base64-encoded string.
+   */
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload  = () => resolve(reader.result.split(',')[1]); // strip data URI prefix
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
   }
-});
-<script type="module" src="app.js"></script>
+</script>
 </body>
 </html>
