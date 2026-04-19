@@ -9,15 +9,135 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 
-<!-- EmailJS SDK -->
+<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  // Replace with your actual EmailJS Public Key
-  emailjs.init("w2mYX4Ei8igosWGh4");
-</script>
+
+<style>
+/* ── Acknowledgment overlay ─────────────────────────── */
+.ack-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,10,0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.ack-overlay.visible { display: flex; }
+
+.ack-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 3rem 2.5rem 2.5rem;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+  animation: ackPop 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes ackPop {
+  from { opacity:0; transform:scale(0.7) translateY(30px); }
+  to   { opacity:1; transform:scale(1)   translateY(0);    }
+}
+.ack-icon {
+  width:72px; height:72px;
+  background: linear-gradient(135deg,#1a3a2e 0%,#2d6a4f 100%);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  animation: iconScale 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes iconScale {
+  from { transform:scale(0); }
+  to   { transform:scale(1); }
+}
+.ack-icon svg { width:36px; height:36px; }
+
+.ack-card h2 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.85rem; font-weight:600; color:#1a1a1a;
+  margin:0 0 0.6rem;
+}
+.ack-card p {
+  font-family:'DM Sans',sans-serif;
+  font-size:0.92rem; color:#555; line-height:1.65;
+  margin:0 0 0.4rem;
+}
+.ack-ref {
+  display:inline-block; margin:1rem 0 1.5rem;
+  background:#f4f1eb; border-radius:8px;
+  padding:0.45rem 1rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.8rem; color:#444; letter-spacing:0.04em;
+}
+.ack-ref strong { color:#1a3a2e; }
+.ack-close {
+  display:inline-block; padding:0.75rem 2.2rem;
+  border-radius:50px;
+  background:linear-gradient(135deg,#1a3a2e,#2d6a4f);
+  color:#fff; font-family:'DM Sans',sans-serif;
+  font-size:0.88rem; font-weight:500; letter-spacing:0.05em;
+  cursor:pointer; border:none;
+  transition:opacity 0.2s, transform 0.2s;
+}
+.ack-close:hover { opacity:0.88; transform:translateY(-1px); }
+
+/* ── Upload progress ─────────────────────────────────── */
+.upload-progress-wrap { display:none; margin-top:0.6rem; }
+.upload-progress-wrap.visible { display:block; }
+.upload-progress-track {
+  height:5px; background:#e8e3d8; border-radius:99px; overflow:hidden;
+}
+.upload-progress-fill {
+  height:100%; width:0%;
+  background:linear-gradient(90deg,#1a3a2e,#2d6a4f);
+  border-radius:99px; transition:width 0.25s ease;
+}
+.upload-progress-label {
+  font-size:0.78rem; color:#666;
+  font-family:'DM Sans',sans-serif; margin-top:0.3rem;
+}
+
+/* ── Error banner ────────────────────────────────────── */
+.form-error-banner {
+  display:none; background:#fff0f0;
+  border:1px solid #f5c6c6; border-radius:10px;
+  padding:0.85rem 1.1rem; margin-bottom:1.2rem;
+  font-family:'DM Sans',sans-serif; font-size:0.88rem; color:#b00;
+}
+.form-error-banner.visible { display:block; }
+.form-error-banner a { color:#b00; }
+
+#fileSizeError {
+  display:none; color:#c00; font-size:0.82rem;
+  margin-top:0.3rem; font-family:'DM Sans',sans-serif;
+}
+</style>
 </head>
 <body>
 
+<!-- ── Acknowledgment Overlay ─────────────────────────── -->
+<div class="ack-overlay" id="ackOverlay" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
+  <div class="ack-card">
+    <div class="ack-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h2 id="ackTitle">Application Received!</h2>
+    <p>Thank you for your interest in joining <strong>Swastik Jain &amp; Co.</strong></p>
+    <p>We have received your resume and will review it carefully. You can expect to hear from us if there is a suitable opportunity.</p>
+    <div class="ack-ref">Reference ID: <strong id="ackRef">—</strong></div>
+    <p style="font-size:0.8rem;color:#888;margin-bottom:1.5rem;">
+      Confirmation sent to <strong id="ackEmail">your email</strong>.
+    </p>
+    <button class="ack-close" onclick="closeAck()">Done</button>
+  </div>
+</div>
+
+<!-- ── Navigation ─────────────────────────────────────── -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-brand">
@@ -38,14 +158,15 @@
   </div>
 </nav>
 
+<!-- ── Hero ───────────────────────────────────────────── -->
 <section class="page-hero">
   <div class="container">
     <div class="section-label">Join Our Team</div>
-    <h1 class="page-title">Careers at<br>Swastik Jain & Co.</h1>
+    <h1 class="page-title">Careers at<br>Swastik Jain &amp; Co.</h1>
   </div>
 </section>
 
-<!-- OPENINGS -->
+<!-- ── Openings ───────────────────────────────────────── -->
 <section class="section">
   <div class="container">
     <div class="careers-intro">
@@ -68,7 +189,7 @@
       </div>
       <div class="career-card">
         <div class="career-tag">Semi-Qualified</div>
-        <h3>Tax & Compliance Associate</h3>
+        <h3>Tax &amp; Compliance Associate</h3>
         <div class="career-meta">📍 Indore &nbsp;|&nbsp; Full Time &nbsp;|&nbsp; Negotiable</div>
         <p>Semi-qualified CA or CA-Intermediate cleared candidate for handling income tax return filings, TDS compliance, GST filings, and client coordination.</p>
       </div>
@@ -82,39 +203,31 @@
   </div>
 </section>
 
-<!-- RESUME UPLOAD -->
+<!-- ── Resume Upload ───────────────────────────────────── -->
 <section class="resume-section" id="apply">
   <div class="container">
     <div class="resume-box">
       <h2>Submit Your Resume</h2>
       <p>Upload your CV/resume (PDF format preferred, max 5 MB) along with a brief note about the role you're interested in. We will review your application and get in touch.</p>
 
-      <div id="resumeSuccess" class="form-success" style="display:none;">
-        <div class="success-icon">✓</div>
-        <h3>Application Received</h3>
-        <p>Thank you for your interest. We will review your resume and reach out if there is a suitable opportunity.</p>
-      </div>
+      <div class="form-error-banner" id="errorBanner"></div>
 
-      <div id="resumeError" class="form-error" style="display:none;">
-        <p>There was an issue sending your application. Please email your resume directly to <a href="mailto:caswastikjain11@gmail.com">caswastikjain11@gmail.com</a></p>
-      </div>
-
-      <form id="resumeForm">
+      <form id="resumeForm" novalidate>
         <div class="form-group">
           <label for="r_name">Full Name <span class="required">*</span></label>
-          <input type="text" id="r_name" name="name" required placeholder="Your full name">
+          <input type="text" id="r_name" required placeholder="Your full name">
         </div>
         <div class="form-group">
           <label for="r_email">Email Address <span class="required">*</span></label>
-          <input type="email" id="r_email" name="email" required placeholder="your@email.com">
+          <input type="email" id="r_email" required placeholder="your@email.com">
         </div>
         <div class="form-group">
           <label for="r_phone">Phone Number</label>
-          <input type="tel" id="r_phone" name="phone" placeholder="+91 XXXXX XXXXX">
+          <input type="tel" id="r_phone" placeholder="+91 XXXXX XXXXX">
         </div>
         <div class="form-group">
           <label for="r_role">Role Interested In <span class="required">*</span></label>
-          <select id="r_role" name="role" required>
+          <select id="r_role" required>
             <option value="">— Select —</option>
             <option>CA Article Assistant</option>
             <option>Accounts Executive</option>
@@ -124,17 +237,24 @@
         </div>
         <div class="form-group">
           <label for="r_message">Brief Note about Yourself</label>
-          <textarea id="r_message" name="message" rows="4" placeholder="Your qualifications, experience, and why you want to join us…"></textarea>
+          <textarea id="r_message" rows="4" placeholder="Your qualifications, experience, and why you want to join us…"></textarea>
         </div>
         <div class="form-group file-upload-group">
-          <label for="r_resume">Upload Resume / CV <span class="required">*</span><br>
+          <label for="r_resume">
+            Upload Resume / CV <span class="required">*</span><br>
             <small style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);">PDF, DOC, or DOCX — Max 5 MB</small>
           </label>
-          <input type="file" id="r_resume" name="resume" accept=".pdf,.doc,.docx" required>
-          <div id="fileSizeError" style="color:red;font-size:0.85rem;margin-top:0.3rem;display:none;">File exceeds 5 MB limit. Please upload a smaller file.</div>
+          <input type="file" id="r_resume" accept=".pdf,.doc,.docx" required>
+          <div id="fileSizeError">File exceeds 5 MB. Please upload a smaller file.</div>
+          <div class="upload-progress-wrap" id="uploadProgressWrap">
+            <div class="upload-progress-track">
+              <div class="upload-progress-fill" id="uploadProgressFill"></div>
+            </div>
+            <div class="upload-progress-label" id="uploadProgressLabel">Uploading… 0%</div>
+          </div>
         </div>
         <div class="form-note">
-          By submitting this form you consent to Swastik Jain & Co. storing your information for recruitment purposes. Your data will not be shared with third parties.
+          By submitting this form you consent to Swastik Jain &amp; Co. storing your information for recruitment purposes. Your data will not be shared with third parties.
         </div>
         <button type="submit" class="btn btn-primary btn-full" id="resumeSubmitBtn">Submit Application</button>
       </form>
@@ -142,12 +262,13 @@
   </div>
 </section>
 
+<!-- ── Footer ──────────────────────────────────────────── -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
         <span class="brand-mark"></span>
-        <strong>Swastik Jain & Co.</strong>
+        <strong>Swastik Jain &amp; Co.</strong>
         <p>Chartered Accountants<br>51A, Sainath Colony<br>Indore – 452001, MP</p>
       </div>
       <div class="footer-nav">
@@ -167,83 +288,167 @@
       </div>
     </div>
     <div class="footer-disclaimer">
-      <p>This website is meant solely for informational purposes and does not constitute any form of solicitation, advertisement, or professional advice. Swastik Jain & Co. shall not be liable for any decisions taken based on the information provided herein.</p>
+      <p>This website is meant solely for informational purposes and does not constitute any form of solicitation, advertisement, or professional advice. Swastik Jain &amp; Co. shall not be liable for any decisions taken based on the information provided herein.</p>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 Swastik Jain & Co. All rights reserved. | Member, Institute of Chartered Accountants of India (ICAI)</p>
+      <p>© 2025 Swastik Jain &amp; Co. All rights reserved. | Member, Institute of Chartered Accountants of India (ICAI)</p>
     </div>
   </div>
 </footer>
 
-<script src="app.js"></script>
+<!-- Firebase v10 compat -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+
 <script>
-  const resumeForm = document.getElementById('resumeForm');
-  const submitBtn  = document.getElementById('resumeSubmitBtn');
-  const fileInput  = document.getElementById('r_resume');
-  const fileSizeError = document.getElementById('fileSizeError');
+/* ═══════════════════════════════════════════════════════
+   INIT FIREBASE
+═══════════════════════════════════════════════════════ */
+firebase.initializeApp({
+  apiKey:            "AIzaSyAF9UoInEijb1bshvtvwNW1HX32xKNqI2k",
+  authDomain:        "website-6bcb7.firebaseapp.com",
+  projectId:         "website-6bcb7",
+  storageBucket:     "website-6bcb7.firebasestorage.app",
+  messagingSenderId: "896028257600",
+  appId:             "1:896028257600:web:0ae43b78b9b136a032dea5",
+  measurementId:     "G-0ZK3YP8GTL"
+});
+const db      = firebase.firestore();
+const storage = firebase.storage();
 
-  // Validate file size on selection
-  fileInput.addEventListener('change', () => {
-    const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
-    if (fileInput.files[0] && fileInput.files[0].size > MAX_BYTES) {
-      fileSizeError.style.display = 'block';
-      fileInput.value = '';
-    } else {
-      fileSizeError.style.display = 'none';
-    }
-  });
+/* ═══════════════════════════════════════════════════════
+   INIT EMAILJS
+═══════════════════════════════════════════════════════ */
+emailjs.init("w2mYX4Ei8igosWGh4");
 
-  resumeForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════ */
+function genRefId() {
+  return 'SJC-' + Date.now().toString(36).toUpperCase() +
+         '-' + Math.random().toString(36).slice(2,6).toUpperCase();
+}
+function setProgress(pct) {
+  document.getElementById('uploadProgressFill').style.width = pct + '%';
+  document.getElementById('uploadProgressLabel').textContent =
+    pct < 100 ? `Uploading… ${Math.round(pct)}%` : 'Upload complete ✓';
+}
+function showError(msg) {
+  const b = document.getElementById('errorBanner');
+  b.innerHTML = msg + ' &nbsp;|&nbsp; Email us directly: <a href="mailto:caswastikjain11@gmail.com">caswastikjain11@gmail.com</a>';
+  b.classList.add('visible');
+  b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function closeAck() {
+  document.getElementById('ackOverlay').classList.remove('visible');
+}
 
-    const file = fileInput.files[0];
-    if (!file) {
-      alert('Please select a resume file before submitting.');
-      return;
-    }
-
-    submitBtn.textContent = 'Submitting…';
-    submitBtn.disabled = true;
-
-    try {
-      // Read the file as base64
-      const base64Data = await readFileAsBase64(file);
-
-      const templateParams = {
-        name:        document.getElementById('r_name').value.trim(),
-        email:       document.getElementById('r_email').value.trim(),
-        phone:       document.getElementById('r_phone').value.trim() || 'Not provided',
-        role:        document.getElementById('r_role').value,
-        message:     document.getElementById('r_message').value.trim() || 'No message provided.',
-        resume_name: file.name,
-        resume_data: base64Data   // base64 string — use in template if your plan supports attachments
-      };
-
-      // Replace 'YOUR_TEMPLATE_ID' with your actual EmailJS template ID
-      await emailjs.send('service_2uzm9pk', 'template_x4hr4b9', templateParams);
-
-      resumeForm.style.display = 'none';
-      document.getElementById('resumeSuccess').style.display = 'block';
-
-    } catch (err) {
-      console.error('EmailJS error:', err);
-      document.getElementById('resumeError').style.display = 'block';
-      submitBtn.textContent = 'Submit Application';
-      submitBtn.disabled = false;
-    }
-  });
-
-  /**
-   * Reads a File object and returns its content as a base64-encoded string.
-   */
-  function readFileAsBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload  = () => resolve(reader.result.split(',')[1]); // strip data URI prefix
-      reader.onerror = () => reject(new Error('Failed to read file'));
-      reader.readAsDataURL(file);
-    });
+/* ═══════════════════════════════════════════════════════
+   FILE SIZE CHECK
+═══════════════════════════════════════════════════════ */
+document.getElementById('r_resume').addEventListener('change', function () {
+  const errEl = document.getElementById('fileSizeError');
+  if (this.files[0] && this.files[0].size > 5 * 1024 * 1024) {
+    errEl.style.display = 'block';
+    this.value = '';
+  } else {
+    errEl.style.display = 'none';
   }
+});
+
+/* ═══════════════════════════════════════════════════════
+   FORM SUBMIT
+═══════════════════════════════════════════════════════ */
+document.getElementById('resumeForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  document.getElementById('errorBanner').classList.remove('visible');
+
+  const btn   = document.getElementById('resumeSubmitBtn');
+  const file  = document.getElementById('r_resume').files[0];
+  if (!file) { alert('Please select a resume file.'); return; }
+
+  const name    = document.getElementById('r_name').value.trim();
+  const email   = document.getElementById('r_email').value.trim();
+  const phone   = document.getElementById('r_phone').value.trim() || 'Not provided';
+  const role    = document.getElementById('r_role').value;
+  const message = document.getElementById('r_message').value.trim() || 'No message provided.';
+  const refId   = genRefId();
+
+  btn.textContent = 'Uploading resume…';
+  btn.disabled    = true;
+
+  const progressWrap = document.getElementById('uploadProgressWrap');
+  progressWrap.classList.add('visible');
+  setProgress(0);
+
+  try {
+    /* ── STEP 1: Upload to Firebase Storage ── */
+    const safeName   = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const storePath  = `resumes/${refId}_${safeName}`;
+    const uploadTask = storage.ref(storePath).put(file);
+
+    await new Promise((resolve, reject) => {
+      uploadTask.on('state_changed',
+        snap => setProgress((snap.bytesTransferred / snap.totalBytes) * 100),
+        reject,
+        resolve
+      );
+    });
+
+    setProgress(100);
+    const downloadURL = await storage.ref(storePath).getDownloadURL();
+
+    /* ── STEP 2: Save to Firestore ── */
+    btn.textContent = 'Saving application…';
+    await db.collection('resume_submissions').doc(refId).set({
+      refId,
+      name, email, phone, role, message,
+      fileName:    file.name,
+      fileSize:    file.size,
+      storePath,
+      downloadURL,
+      submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      status:      'new'
+    });
+
+    /* ── STEP 3: Send EmailJS notification ── */
+    btn.textContent = 'Sending notification…';
+    await emailjs.send('service_2uzm9pk', 'template_x4hr4b9', {
+      ref_id:       refId,
+      name,
+      email,
+      phone,
+      role,
+      message,
+      file_name:    file.name,
+      download_url: downloadURL,
+      submitted_at: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+    });
+
+    /* ── STEP 4: Show acknowledgment ── */
+    document.getElementById('ackRef').textContent   = refId;
+    document.getElementById('ackEmail').textContent = email;
+    document.getElementById('ackOverlay').classList.add('visible');
+
+    this.reset();
+    progressWrap.classList.remove('visible');
+
+  } catch (err) {
+    console.error(err);
+    showError('Submission failed: ' + (err.message || 'Unknown error.'));
+    progressWrap.classList.remove('visible');
+  } finally {
+    btn.textContent = 'Submit Application';
+    btn.disabled    = false;
+  }
+});
+
+/* Close overlay on backdrop click */
+document.getElementById('ackOverlay').addEventListener('click', function (e) {
+  if (e.target === this) closeAck();
+});
 </script>
 </body>
 </html>
